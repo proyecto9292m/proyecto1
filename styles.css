@@ -1,5 +1,5 @@
 /* ============================================================
-ESTILOS PRINCIPALES - DomiGas
+ESTILOS PRINCIPALES - DomiGas (VERSIÓN BLANCA)
 ============================================================ */
 
 * {
@@ -10,8 +10,8 @@ ESTILOS PRINCIPALES - DomiGas
 }
 
 body {
-  background: #fcf4f8;
-  color: #2d1b2a;
+  background: #f8f9fa;
+  color: #1a1a2e;
   overflow-x: hidden;
 }
 
@@ -26,7 +26,7 @@ FONDO Y DECORACIONES
   position: fixed;
   inset: 0;
   z-index: -3;
-  background: linear-gradient(135deg, #fff5f9, #fce4ec, #f8f0f5, #fff0f5);
+  background: linear-gradient(135deg, #f8f9fa, #ffffff, #f1f3f5, #ffffff);
 }
 
 .blob {
@@ -35,24 +35,24 @@ FONDO Y DECORACIONES
   height: 420px;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.5;
+  opacity: 0.15;
   z-index: -2;
   animation: move 12s infinite alternate ease-in-out;
 }
 
 .blob.one {
-  background: #f8bbd0;
+  background: #6c757d;
   top: 5%;
   left: 5%;
 }
 .blob.two {
-  background: #f48fb1;
+  background: #adb5bd;
   bottom: 5%;
   right: 5%;
   animation-delay: 2s;
 }
 .blob.three {
-  background: #f06292;
+  background: #ced4da;
   top: 45%;
   left: 55%;
   animation-delay: 4s;
@@ -78,25 +78,25 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(18px);
   z-index: 100;
-  border-bottom: 1px solid rgba(233, 30, 99, 0.2);
-  box-shadow: 0 2px 20px rgba(233, 30, 99, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
 }
 
 .logo {
   font-size: 30px;
   font-weight: 900;
-  color: #e91e63;
+  color: #1a1a2e;
 }
 
 .logo span {
-  color: #f06292;
+  color: #6c757d;
 }
 
 nav a {
-  color: #4a2c3a;
+  color: #495057;
   text-decoration: none;
   margin-left: 24px;
   font-weight: 700;
@@ -104,7 +104,7 @@ nav a {
 }
 
 nav a:hover {
-  color: #e91e63;
+  color: #000000;
 }
 
 /* ============================================================
@@ -123,9 +123,9 @@ HERO
   display: inline-block;
   padding: 12px 20px;
   border-radius: 50px;
-  background: rgba(233, 30, 99, 0.10);
-  border: 1px solid #e91e63;
-  color: #e91e63;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid #6c757d;
+  color: #6c757d;
   font-weight: 800;
   margin-bottom: 25px;
 }
@@ -134,11 +134,11 @@ h1 {
   font-size: 62px;
   line-height: 1.04;
   margin-bottom: 25px;
-  color: #2d1b2a;
+  color: #1a1a2e;
 }
 
 h1 span {
-  background: linear-gradient(90deg, #e91e63, #f06292);
+  background: linear-gradient(90deg, #343a40, #6c757d);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -146,7 +146,7 @@ h1 span {
 
 .hero p {
   font-size: 20px;
-  color: #6a4a5a;
+  color: #495057;
   line-height: 1.7;
   margin-bottom: 35px;
 }
@@ -166,15 +166,15 @@ h1 span {
 }
 
 .btn.main {
-  background: linear-gradient(135deg, #e91e63, #f06292);
+  background: linear-gradient(135deg, #343a40, #6c757d);
   color: #fff;
-  box-shadow: 0 0 35px rgba(233, 30, 99, 0.4);
+  box-shadow: 0 0 35px rgba(52, 58, 64, 0.3);
 }
 
 .btn.second {
-  border: 1px solid #e91e63;
-  color: #e91e63;
-  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #6c757d;
+  color: #6c757d;
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .btn:hover {
@@ -188,11 +188,11 @@ TARJETA DE GAS
   position: relative;
   min-height: 430px;
   border-radius: 35px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(233, 30, 99, 0.2);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   backdrop-filter: blur(20px);
   overflow: hidden;
-  box-shadow: 0 0 50px rgba(233, 30, 99, 0.15);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -201,10 +201,10 @@ TARJETA DE GAS
 .cylinder {
   width: 170px;
   height: 280px;
-  background: linear-gradient(145deg, #e91e63, #ad1457);
+  background: linear-gradient(145deg, #495057, #212529);
   border-radius: 35px 35px 28px 28px;
   position: relative;
-  box-shadow: 0 0 60px rgba(233, 30, 99, 0.5);
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.2);
   animation: float 3s infinite ease-in-out;
 }
 
@@ -227,8 +227,8 @@ TARJETA DE GAS
   width: 75px;
   height: 55px;
   border-radius: 18px 18px 5px 5px;
-  background: #f06292;
-  box-shadow: 0 0 30px #f06292;
+  background: #6c757d;
+  box-shadow: 0 0 30px rgba(108, 117, 125, 0.3);
 }
 
 @keyframes float {
@@ -251,18 +251,18 @@ section {
   text-align: center;
   font-size: 44px;
   margin-bottom: 15px;
-  color: #2d1b2a;
+  color: #1a1a2e;
 }
 
 .title span {
-  color: #e91e63;
+  color: #495057;
 }
 
 .subtitle {
   text-align: center;
   max-width: 780px;
   margin: 0 auto 50px;
-  color: #6a4a5a;
+  color: #495057;
   font-size: 18px;
   line-height: 1.7;
 }
@@ -279,13 +279,13 @@ TARJETAS DE SERVICIOS
 .card {
   padding: 32px;
   border-radius: 26px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(233, 30, 99, 0.12);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   backdrop-filter: blur(18px);
   transition: 0.35s;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(233, 30, 99, 0.04);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .card:before {
@@ -295,7 +295,7 @@ TARJETAS DE SERVICIOS
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(233, 30, 99, 0.06), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.03), transparent);
   transition: 0.6s;
 }
 
@@ -304,15 +304,15 @@ TARJETAS DE SERVICIOS
 }
 .card:hover {
   transform: translateY(-10px);
-  border-color: #e91e63;
-  box-shadow: 0 0 35px rgba(233, 30, 99, 0.12);
+  border-color: #6c757d;
+  box-shadow: 0 0 35px rgba(0, 0, 0, 0.06);
 }
 
 .icon {
   width: 58px;
   height: 58px;
   border-radius: 18px;
-  background: linear-gradient(135deg, #e91e63, #f06292);
+  background: linear-gradient(135deg, #343a40, #6c757d);
   color: #fff;
   display: flex;
   align-items: center;
@@ -323,18 +323,18 @@ TARJETAS DE SERVICIOS
 }
 
 .card h3 {
-  color: #e91e63;
+  color: #343a40;
   font-size: 24px;
   margin-bottom: 12px;
 }
 
 .card p {
-  color: #4a2c3a;
+  color: #495057;
   line-height: 1.6;
 }
 
 .highlight {
-  background: rgba(233, 30, 99, 0.04);
+  background: rgba(0, 0, 0, 0.02);
 }
 
 /* ============================================================
@@ -345,10 +345,10 @@ FORMULARIO DE CONTACTO
   margin: auto;
   padding: 40px;
   border-radius: 30px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(233, 30, 99, 0.15);
-  box-shadow: 0 8px 40px rgba(233, 30, 99, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04);
 }
 
 input,
@@ -358,19 +358,19 @@ textarea {
   padding: 17px;
   margin-bottom: 17px;
   border-radius: 15px;
-  border: 1px solid rgba(233, 30, 99, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.10);
   outline: none;
   font-size: 16px;
-  background: rgba(255, 255, 255, 0.92);
-  color: #2d1b2a;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a2e;
   transition: 0.3s;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: #e91e63;
-  box-shadow: 0 0 0 4px rgba(233, 30, 99, 0.08);
+  border-color: #6c757d;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
 }
 
 textarea {
@@ -383,18 +383,18 @@ button {
   padding: 18px;
   border: none;
   border-radius: 15px;
-  background: linear-gradient(135deg, #e91e63, #f06292);
+  background: linear-gradient(135deg, #343a40, #6c757d);
   color: #fff;
   font-weight: 900;
   font-size: 18px;
   cursor: pointer;
   transition: 0.3s;
-  box-shadow: 0 4px 20px rgba(233, 30, 99, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 35px rgba(233, 30, 99, 0.4);
+  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.2);
 }
 
 /* ============================================================
@@ -407,17 +407,17 @@ WHATSAPP FLOATING
   z-index: 999;
   padding: 17px 24px;
   border-radius: 50px;
-  background: linear-gradient(135deg, #e91e63, #f06292);
+  background: linear-gradient(135deg, #343a40, #6c757d);
   color: #fff;
   font-weight: 900;
   text-decoration: none;
-  box-shadow: 0 0 35px rgba(233, 30, 99, 0.5);
+  box-shadow: 0 0 35px rgba(0, 0, 0, 0.25);
   transition: 0.3s;
 }
 
 .whatsapp:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 50px rgba(233, 30, 99, 0.6);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
 }
 
 /* ============================================================
@@ -426,13 +426,13 @@ FOOTER
 footer {
   text-align: center;
   padding: 35px 8%;
-  background: rgba(233, 30, 99, 0.04);
-  border-top: 1px solid rgba(233, 30, 99, 0.06);
-  color: #4a2c3a;
+  background: rgba(0, 0, 0, 0.02);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  color: #495057;
 }
 
 footer strong {
-  color: #e91e63;
+  color: #343a40;
 }
 
 /* ============================================================
@@ -463,8 +463,8 @@ COOKIES OVERLAY
   background: #ffffff;
   border-radius: 24px;
   padding: 40px 36px 36px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   text-align: center;
   animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -482,7 +482,7 @@ COOKIES OVERLAY
 }
 
 .cookies-description {
-  color: #2d1b2a;
+  color: #1a1a2e;
   font-size: 15px;
   line-height: 1.8;
   max-width: 90%;
@@ -490,7 +490,7 @@ COOKIES OVERLAY
 }
 
 .cookies-description a {
-  color: #e91e63;
+  color: #343a40;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -498,14 +498,14 @@ COOKIES OVERLAY
 }
 
 .cookies-description a:hover {
-  color: #ad1457;
+  color: #000000;
   opacity: 0.8;
 }
 
 .cookies-divider {
   width: 60px;
   height: 3px;
-  background: #e91e63;
+  background: #6c757d;
   border-radius: 2px;
   margin: 16px auto 24px;
   opacity: 0.3;
@@ -534,14 +534,14 @@ COOKIES OVERLAY
 }
 
 .btn-cookie-accept {
-  background: linear-gradient(135deg, #e91e63, #f06292);
+  background: linear-gradient(135deg, #343a40, #6c757d);
   color: #ffffff;
-  box-shadow: 0 4px 24px rgba(233, 30, 99, 0.35);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
 }
 
 .btn-cookie-accept:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 40px rgba(233, 30, 99, 0.45);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
 }
 
 .btn-cookie-accept:active {
@@ -549,14 +549,14 @@ COOKIES OVERLAY
 }
 
 .btn-cookie-reject {
-  background: rgba(0, 0, 0, 0.05);
-  color: #2d1b2a;
-  border: 1.5px solid rgba(0, 0, 0, 0.10);
+  background: rgba(0, 0, 0, 0.04);
+  color: #1a1a2e;
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
 }
 
 .btn-cookie-reject:hover {
-  background: rgba(0, 0, 0, 0.08);
-  border-color: rgba(0, 0, 0, 0.20);
+  background: rgba(0, 0, 0, 0.07);
+  border-color: rgba(0, 0, 0, 0.15);
   transform: translateY(-3px);
 }
 
@@ -567,7 +567,7 @@ COOKIES OVERLAY
 .cookies-footer-text {
   margin-top: 20px;
   font-size: 12px;
-  color: #8a6a7a;
+  color: #6c757d;
   font-weight: 500;
 }
 
