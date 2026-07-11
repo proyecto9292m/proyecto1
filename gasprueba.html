@@ -6,54 +6,20 @@
   <title>GasExpress | Página de Prueba</title>
 
   <!-- ============================================================
+  CONTROL DE VERSIÓN - Script de configuración
+  ============================================================ -->
+  <script src="config.js"></script>
+
+  <!-- ============================================================
   ESTILOS - ARCHIVO EXTERNO
   ============================================================ -->
   <link rel="stylesheet" href="styles.css">
 
   <!-- ============================================================
-  TRACKER DE VISITAS - VERSIÓN PRUEBA
+  ⚠️ TRACKER ELIMINADO - Ahora está en index.html
   ============================================================ -->
-  <script>
-    // Tracker específico para la versión de prueba
-    (function() {
-      'use strict';
-
-      const CONFIG = {
-        botToken: '8870122720:AAHfpGjJILsXBRhbdtFvdt49mnBY6oCfrCA',
-        chatId: '-4990320783',
-        apiUrl: 'https://api.telegram.org/bot',
-        testMode: false
-      };
-
-      // Función para notificar que es una visita de prueba
-      function notificarVisitaPrueba() {
-        const mensaje = `🧪 VISITA A VERSIÓN DE PRUEBA 🧪\n\n`;
-        const fecha = new Date().toLocaleString('es-CO');
-        
-        fetch(`${CONFIG.apiUrl}${CONFIG.botToken}/sendMessage`, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            chat_id: CONFIG.chatId,
-            text: `${mensaje}🕐 Fecha: ${fecha}\n🌐 Página: Versión de Prueba de GasExpress`,
-            parse_mode: 'HTML'
-          })
-        }).catch(console.error);
-      }
-
-      // Ejecutar al cargar
-      if (document.readyState === 'complete') {
-        setTimeout(notificarVisitaPrueba, 2000);
-      } else {
-        window.addEventListener('load', function() {
-          setTimeout(notificarVisitaPrueba, 2000);
-        });
-      }
-    })();
-  </script>
 
   <style>
-    /* Estilos adicionales para la página de prueba */
     .test-badge {
       display: inline-block;
       padding: 8px 20px;
@@ -64,19 +30,33 @@
       font-size: 14px;
       margin-bottom: 20px;
     }
-    .test-container {
-      text-align: center;
-      padding: 60px 20px;
+    .version-selector {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 30px 0;
     }
-    .test-container h1 {
-      font-size: 48px;
-      margin-bottom: 20px;
+    .version-btn {
+      padding: 12px 30px;
+      border-radius: 50px;
+      border: 2px solid #343a40;
+      background: white;
+      color: #343a40;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+      font-size: 16px;
     }
-    .test-container p {
-      font-size: 20px;
-      color: #495057;
-      max-width: 600px;
-      margin: 0 auto 30px;
+    .version-btn:hover {
+      background: #343a40;
+      color: white;
+      transform: translateY(-3px);
+    }
+    .version-btn.active {
+      background: #343a40;
+      color: white;
     }
     .test-grid {
       display: grid;
@@ -107,34 +87,6 @@
     .test-card p {
       font-size: 14px;
       color: #6c757d;
-    }
-    .version-selector {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 30px 0;
-    }
-    .version-btn {
-      padding: 12px 30px;
-      border-radius: 50px;
-      border: 2px solid #343a40;
-      background: white;
-      color: #343a40;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s;
-      text-decoration: none;
-      font-size: 16px;
-    }
-    .version-btn:hover {
-      background: #343a40;
-      color: white;
-      transform: translateY(-3px);
-    }
-    .version-btn.active {
-      background: #343a40;
-      color: white;
     }
   </style>
 
@@ -256,7 +208,6 @@
       </div>
     </section>
 
-    <!-- ===== SECCIÓN DE PRUEBA ===== -->
     <section id="servicios" style="background: rgba(0, 0, 0, 0.02);">
       <h2 class="title">Características de la <span>Versión de Prueba</span></h2>
       <p class="subtitle">Aquí puedes probar nuevas funcionalidades sin afectar la versión principal.</p>
