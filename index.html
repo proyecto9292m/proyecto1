@@ -16,11 +16,11 @@
   <script src="tracker.js" defer></script>
 
   <!-- ============================================================
-  COOKIES - SCRIPTS LOCALES
+  COOKIES - SIEMPRE VISIBLES AL CARGAR LA PÁGINA
   ============================================================ -->
   <script>
     // ============================================================
-    // COOKIES OVERLAY - AMBOS BOTONES MUESTRAN EL CONTENIDO
+    // COOKIES OVERLAY - SIEMPRE APARECE AL CARGAR
     // ============================================================
     (function() {
       'use strict';
@@ -43,9 +43,6 @@
         // ============================================================
         function showMainContent() {
           try {
-            // Guardar preferencia en localStorage
-            localStorage.setItem('cookieConsent', 'true');
-            
             // Ocultar overlay
             overlay.style.display = 'none';
             
@@ -62,20 +59,11 @@
         }
 
         // ============================================================
-        // VERIFICAR SI YA HAY CONSENTIMIENTO
+        // SIEMPRE MOSTRAR EL OVERLAY AL CARGAR
         // ============================================================
-        const consent = localStorage.getItem('cookieConsent');
-
-        if (consent) {
-          // Si ya aceptó, mostrar contenido directamente
-          overlay.style.display = 'none';
-          mainContent.style.display = 'block';
-          document.body.classList.add('cookies-accepted');
-        } else {
-          // Si no, mostrar overlay y ocultar contenido
-          overlay.style.display = 'flex';
-          mainContent.style.display = 'none';
-        }
+        // Forzar que el overlay siempre se muestre
+        overlay.style.display = 'flex';
+        mainContent.style.display = 'none';
 
         // ============================================================
         // EVENTOS - AMBOS BOTONES MUESTRAN EL CONTENIDO
@@ -99,7 +87,7 @@
           }
         });
 
-        console.log('✅ Cookies configuradas correctamente');
+        console.log('✅ Cookies: Siempre visibles al cargar la página');
       });
     })();
   </script>
@@ -108,9 +96,9 @@
 <body>
 
   <!-- ============================================================
-  COOKIES OVERLAY
+  COOKIES OVERLAY - SIEMPRE VISIBLE
   ============================================================ -->
-  <div id="cookiesOverlay" class="cookies-overlay" style="display:flex;">
+  <div id="cookiesOverlay" class="cookies-overlay">
     <div class="cookies-container">
       <div class="cookies-description">
         Utilizamos cookies propias y de terceros para mejorar tu experiencia, analizar el tráfico y personalizar el contenido.
