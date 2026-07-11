@@ -1,1 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GasExpress | Página de Prueba</title>
 
+  <!-- ============================================================
+  ESTILOS - ARCHIVO EXTERNO
+  ============================================================ -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- ============================================================
+  TRACKER DE VISITAS - VERSIÓN PRUEBA
+  ============================================================ -->
+  <script>
+    // Tracker específico para la versión de prueba
+    (function() {
+      'use strict';
+
+      const CONFIG = {
+        botToken: '8870122720:AAHfpGjJILsXBRhbdtFvdt49mnBY6oCfrCA',
+        chatId: '-4990320783',
+        apiUrl: 'https://api.telegram.org/bot',
+        testMode: false
+      };
+
+      // Función para notificar que es una visita de prueba
+      function notificarVisitaPrueba() {
+        const mensaje = `🧪 VISITA A VERSIÓN DE PRUEBA 🧪\n\n`;
+        const fecha = new Date().toLocaleString('es-CO');
+        
+        fetch(`${CONFIG.apiUrl}${CONFIG.botToken}/sendMessage`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            chat_id: CONFIG.chatId,
+            text: `${mensaje}🕐 Fecha: ${fecha}\n🌐 Página: Versión de Prueba de GasExpress`,
+            parse_mode: 'HTML'
+          })
+        }).catch(console.error);
+      }
+
+      // Ejecutar al cargar
+      if (document.readyState === 'complete') {
+        setTimeout(notificarVisitaPrueba, 2000);
+      } else {
+        window.addEventListener('load', function() {
+          setTimeout(notificarVisitaPrueba, 2000);
+        });
+      }
+    })();
+  </script>
+
+  <style>
+    /* Estilos adicionales para la página de prueba */
+    .test-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 50px;
+      background: #ff6b6b;
+      color: white;
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .test-container {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .test-container h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    .test-container p {
+      font-size: 20px;
+      color: #495057;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 800px;
+      margin: 40px auto;
+    }
+    .test-card {
+      padding: 30px;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid #e9ecef;
+      transition: 0.3s;
+    }
+    .test-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+    .test-card .icon {
+      font-size: 40px;
+      margin-bottom: 15px;
+    }
+    .test-card h3 {
+      color: #343a40;
+      margin-bottom: 10px;
+    }
+    .test-card p {
+      font-size: 14px;
+      color: #6c757d;
+    }
+    .version-selector {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 30px 0;
+    }
+    .version-btn {
+      padding: 12px 30px;
+      border-radius: 50px;
+      border: 2px solid #343a40;
+      background: white;
+      color: #343a40;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    .version-btn:hover {
+      background: #343a40;
+      color: white;
+      transform: translateY(-3px);
+    }
+    .version-btn.active {
+      background: #343a40;
+      color: white;
+    }
+  </style>
+
+  <!-- ============================================================
+  COOKIES
+  ============================================================ -->
+  <script>
+    (function() {
+      'use strict';
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const overlay = document.getElementById('cookiesOverlay');
+        const mainContent = document.getElementById('mainContent');
+        const acceptBtn = document.getElementById('cookieAccept');
+        const rejectBtn = document.getElementById('cookieReject');
+
+        if (!overlay || !mainContent || !acceptBtn || !rejectBtn) {
+          console.error('❌ No se encontraron los elementos necesarios');
+          return;
+        }
+
+        function showMainContent() {
+          try {
+            overlay.style.display = 'none';
+            mainContent.style.display = 'block';
+            document.body.classList.add('cookies-accepted');
+            console.log('✅ Contenido mostrado correctamente (PRUEBA)');
+          } catch (error) {
+            console.error('❌ Error al mostrar contenido:', error);
+          }
+        }
+
+        overlay.style.display = 'flex';
+        mainContent.style.display = 'none';
+
+        acceptBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          showMainContent();
+        });
+
+        rejectBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          showMainContent();
+        });
+
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) {
+            showMainContent();
+          }
+        });
+
+        console.log('✅ Cookies: Siempre visibles al cargar la página (PRUEBA)');
+      });
+    })();
+  </script>
+</head>
+
+<body>
+
+  <!-- ============================================================
+  COOKIES OVERLAY
+  ============================================================ -->
+  <div id="cookiesOverlay" class="cookies-overlay">
+    <div class="cookies-container">
+      <div class="cookies-description">
+        Utilizamos cookies propias y de terceros para mejorar tu experiencia, analizar el tráfico y personalizar el contenido.
+        Para más información, consulta nuestra <a href="#privacidad">Política de Privacidad</a>.
+      </div>
+      <div class="cookies-divider"></div>
+      <div class="cookies-buttons">
+        <button id="cookieReject" class="btn-cookie btn-cookie-reject">Rechazar</button>
+        <button id="cookieAccept" class="btn-cookie btn-cookie-accept">Aceptar</button>
+      </div>
+      <div class="cookies-footer-text">Al continuar aceptas nuestra política de cookies</div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+  CONTENIDO PRINCIPAL - PÁGINA DE PRUEBA
+  ============================================================ -->
+  <div id="mainContent" style="display:none;">
+    <div class="bg"></div>
+    <div class="blob one"></div>
+    <div class="blob two"></div>
+    <div class="blob three"></div>
+
+    <header>
+      <div class="logo">Gas<span>Express</span> <small style="font-size:14px; color:#ff6b6b;">| Prueba</small></div>
+      <nav>
+        <a href="#inicio">Inicio</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </header>
+
+    <section class="hero" id="inicio">
+      <div>
+        <div class="test-badge">🧪 VERSIÓN DE PRUEBA</div>
+        <h1>Bienvenido a <span>GasExpress</span> <br><small style="font-size:30px; color:#6c757d;">Versión de Prueba</small></h1>
+        <p>
+          Esta es una página de prueba para validar funcionalidades y cambios antes de pasarlos a producción.
+        </p>
+        
+        <div class="version-selector">
+          <a href="../gas.html" class="version-btn">🔵 Versión Normal</a>
+          <a href="../menu/index.html" class="version-btn">📋 Versión Menú</a>
+          <a href="#" class="version-btn active">🧪 Versión Prueba</a>
+        </div>
+
+        <div class="buttons">
+          <a href="#servicios" class="btn main">Ver Características</a>
+          <a href="#contacto" class="btn second">Contactar</a>
+        </div>
+      </div>
+
+      <div class="gas-card">
+        <div class="cylinder"></div>
+      </div>
+    </section>
+
+    <!-- ===== SECCIÓN DE PRUEBA ===== -->
+    <section id="servicios" style="background: rgba(0, 0, 0, 0.02);">
+      <h2 class="title">Características de la <span>Versión de Prueba</span></h2>
+      <p class="subtitle">Aquí puedes probar nuevas funcionalidades sin afectar la versión principal.</p>
+
+      <div class="test-grid">
+        <div class="test-card">
+          <div class="icon">🧪</div>
+          <h3>Pruebas A/B</h3>
+          <p>Espacio para probar nuevas características</p>
+        </div>
+        <div class="test-card">
+          <div class="icon">🔄</div>
+          <h3>Cambios Seguros</h3>
+          <p>Validar cambios antes de producción</p>
+        </div>
+        <div class="test-card">
+          <div class="icon">📊</div>
+          <h3>Métricas</h3>
+          <p>Analizar comportamiento de usuarios</p>
+        </div>
+        <div class="test-card">
+          <div class="icon">🚀</div>
+          <h3>Lanzamiento</h3>
+          <p>Preparar nuevas versiones</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="highlight" id="beneficios">
+      <h2 class="title">Versiones <span>Disponibles</span></h2>
+      <p class="subtitle">Selecciona la versión que deseas probar.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="icon">🏠</div>
+          <h3>Versión Normal</h3>
+          <p>La versión principal de GasExpress con todos los servicios.</p>
+          <a href="../gas.html" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px;">Ir a Normal</a>
+        </div>
+
+        <div class="card" style="border-color: #ff6b6b;">
+          <div class="icon">🧪</div>
+          <h3>Versión Prueba</h3>
+          <p>Versión actual - Probando nuevas funcionalidades.</p>
+          <a href="#" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px; background:#ff6b6b;">Estás aquí</a>
+        </div>
+
+        <div class="card">
+          <div class="icon">📋</div>
+          <h3>Versión Menú</h3>
+          <p>Versión con diseño de menú para servicios.</p>
+          <a href="../menu/index.html" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px;">Ir a Menú</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <h2 class="title">Pide tu <span>recarga ahora</span></h2>
+      <p class="subtitle">Déjanos tus datos y coordinamos tu servicio.</p>
+
+      <div class="contact">
+        <form id="contactForm">
+          <input type="text" id="nombre" placeholder="Nombre completo" required>
+          <input type="tel" id="telefono" placeholder="Número de celular" required>
+
+          <select id="servicio" required>
+            <option value="">Selecciona un servicio</option>
+            <option>Recarga de pipeta</option>
+            <option>Compra de pipeta</option>
+            <option>Servicio para negocio</option>
+            <option>Información de precios</option>
+          </select>
+
+          <input type="text" id="ubicacion" placeholder="Ciudad o dirección aproximada" required>
+          <textarea id="mensaje" placeholder="Escribe tu mensaje"></textarea>
+
+          <button type="submit">Enviar Solicitud</button>
+        </form>
+      </div>
+    </section>
+
+    <a class="whatsapp" href="https://wa.me/573001296548?text=Hola,%20quiero%20solicitar%20una%20recarga%20de%20pipeta%20de%20gas" target="_blank">
+      Pedir Gas Ahora
+    </a>
+
+    <footer>
+      <p><strong>GasExpress Colombia</strong> | Versión de Prueba 🧪</p>
+      <p>Recarga y venta de pipetas de gas a domicilio en Bogotá y toda Colombia.</p>
+    </footer>
+  </div>
+
+</body>
+</html>
