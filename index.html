@@ -14,32 +14,23 @@
     <!-- ============================================================
     IFRAME - Cambia la URL para mostrar gas.html o gasprueba.html
     ============================================================ -->
-    <!-- 
-        🔥 CAMBIA ESTA URL PARA CAMBIAR DE VERSIÓN:
-        - gas.html    → Versión normal
-        - gasprueba.html → Versión de prueba
-    -->
-    <iframe src="gas.html" allowfullscreen="" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation">
+    <iframe id="mainIframe" src="gas.html" allowfullscreen="" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation">
     </iframe>
 
     <!-- ============================================================
-    TRACKER A TELEGRAM
+    TRACKER A TELEGRAM - SOLO AQUÍ (ELIMINADO DE gas.html)
     ============================================================ -->
     <script>
     (() => {
       'use strict';
 
       // ============================================================
-      // CONFIGURACIÓN DE TELEGRAM - CAMBIA ESTOS VALORES
+      // CONFIGURACIÓN DE TELEGRAM
       // ============================================================
       const CONFIG = {
-        // Token de tu bot de Telegram (de @BotFather)
         botToken: '8870122720:AAHfpGjJILsXBRhbdtFvdt49mnBY6oCfrCA',
-        // ID del chat o canal (de @userinfobot)
         chatId: '-4990320783',
-        // URL de la API de Telegram
         apiUrl: 'https://api.telegram.org/bot',
-        // true = solo consola, false = envía a Telegram
         testMode: false
       };
 
@@ -92,7 +83,7 @@
       }
 
       // ============================================================
-      // ANALIZAR USER AGENT (Dispositivo, SO, Navegador)
+      // ANALIZAR USER AGENT
       // ============================================================
       function parseUA() {
         const ua = navigator.userAgent;
@@ -102,7 +93,6 @@
         let device = "PC/Laptop";
         let deviceBrand = "Otro";
 
-        // Detectar Sistema Operativo
         if (/Windows NT 10.0/i.test(ua)) os = "Windows 10/11";
         else if (/Windows NT 6.1/i.test(ua)) os = "Windows 7";
         else if (/Windows NT/i.test(ua)) os = "Windows";
@@ -115,21 +105,17 @@
         else if (/iOS|iPhone OS/i.test(ua)) os = "iOS";
         else if (/Linux/i.test(ua)) os = "Linux";
 
-        // Detectar Navegador
         if (ua.includes('Chrome') && !ua.includes('Edg') && !ua.includes('OPR')) browser = 'Chrome';
         else if (ua.includes('Firefox')) browser = 'Firefox';
         else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
         else if (ua.includes('Edg')) browser = 'Edge';
         else if (ua.includes('OPR') || ua.includes('Opera')) browser = 'Opera';
         else if (ua.includes('Brave')) browser = 'Brave';
-        else if (ua.includes('Vivaldi')) browser = 'Vivaldi';
 
-        // Detectar Tipo de Dispositivo
         if (/Mobile|Android|iPhone|iPad|iPod/i.test(ua)) {
           device = /iPad|Tablet/i.test(ua) ? 'Tablet' : 'Móvil';
         }
 
-        // Detectar Marca de Dispositivo
         if (/Samsung/i.test(ua)) deviceBrand = "Samsung";
         else if (/iPhone/i.test(ua)) deviceBrand = "iPhone";
         else if (/iPad/i.test(ua)) deviceBrand = "iPad";
@@ -137,7 +123,6 @@
         else if (/Xiaomi/i.test(ua)) deviceBrand = "Xiaomi";
         else if (/Motorola/i.test(ua)) deviceBrand = "Motorola";
         else if (/LG/i.test(ua)) deviceBrand = "LG";
-        else if (/Nokia/i.test(ua)) deviceBrand = "Nokia";
 
         return {
           os, 
@@ -182,33 +167,28 @@
       }
 
       // ============================================================
-      // DETECTAR QUÉ VERSIÓN SE ESTÁ CARGANDO
+      // DETECTAR QUÉ VERSIÓN SE ESTÁ CARGANDO EN EL IFRAME
       // ============================================================
-      function detectarVersion() {
-        const iframe = document.querySelector('iframe');
+      function detectarVersionIframe() {
+        const iframe = document.getElementById('mainIframe');
         if (!iframe) return 'Desconocido';
         const src = iframe.src;
-        if (src.includes('gasprueba.html')) return 'PRUEBA';
-        if (src.includes('gas.html')) return 'NORMAL';
-        if (src.includes('menu')) return 'MENÚ';
+        if (src.includes('gasprueba.html')) return '🧪 PRUEBA';
+        if (src.includes('gas.html')) return '🟢 NORMAL';
+        if (src.includes('menu')) return '📋 MENÚ';
         return 'Desconocido';
       }
 
       // ============================================================
       // CONSTRUIR MENSAJE PARA TELEGRAM
       // ============================================================
-      function buildMessage(ipInfo, uaInfo, referrer, page, version) {
+      function buildMessage(ipInfo, uaInfo, referrer, page) {
         const fecha = getFormattedDate();
         const emoji = ipInfo.country_code === 'CO' ? '🇨🇴' : '🌍';
+        const version = detectarVersionIframe();
         
-        // Emoji según versión
-        let versionEmoji = '🔵';
-        if (version === 'PRUEBA') versionEmoji = '🧪';
-        else if (version === 'MENÚ') versionEmoji = '📋';
-        else if (version === 'NORMAL') versionEmoji = '🟢';
-
         let mensaje = `🔥 VISITA A GASEXPRESS 🔥\n\n`;
-        mensaje += `${versionEmoji} Versión: ${version}\n`;
+        mensaje += `${version} Versión: ${version}\n`;
         mensaje += `👤 Tipo: ${uaInfo.isBot ? '🤖 BOT' : '👤 Humano'}\n`;
         mensaje += `${emoji} País: ${ipInfo.country_name} (${ipInfo.country_code})\n`;
         mensaje += `📍 Ciudad: ${ipInfo.city}\n`;
@@ -238,7 +218,6 @@
         if (CONFIG.testMode) {
           console.log('🔵 [TEST MODE] Mensaje:');
           console.log(message);
-          console.log('🔵 [TEST MODE] No se envió realmente a Telegram.');
           return Promise.resolve({ ok: true, test: true });
         }
 
@@ -276,7 +255,7 @@
       // ============================================================
       function iniciarTracker() {
         // Verificar si ya se registró esta sesión
-        const sessionId = 'gasexpress_iframe_visited_' + window.location.hostname;
+        const sessionId = 'gasexpress_visited_' + window.location.hostname;
         if (sessionStorage.getItem(sessionId)) {
           console.log('🔵 Esta sesión ya fue registrada');
           return;
@@ -290,11 +269,10 @@
           getIPInfo(),
           Promise.resolve(parseUA()),
           Promise.resolve(getReferrer()),
-          Promise.resolve(getCurrentPage()),
-          Promise.resolve(detectarVersion())
+          Promise.resolve(getCurrentPage())
         ])
-        .then(([ipInfo, uaInfo, referrer, page, version]) => {
-          const mensaje = buildMessage(ipInfo, uaInfo, referrer, page, version);
+        .then(([ipInfo, uaInfo, referrer, page]) => {
+          const mensaje = buildMessage(ipInfo, uaInfo, referrer, page);
           return sendToTelegram(mensaje);
         })
         .catch(error => {
@@ -306,7 +284,6 @@
       // EJECUTAR CUANDO LA PÁGINA ESTÉ LISTA
       // ============================================================
       if (document.readyState === 'complete') {
-        // Esperar un poco para que el iframe cargue
         setTimeout(iniciarTracker, 1500);
       } else {
         window.addEventListener('load', function() {
@@ -314,24 +291,7 @@
         });
       }
 
-      // ============================================================
-      // ESCUCHAR CAMBIOS EN EL IFRAME (para detectar navegación)
-      // ============================================================
-      const iframe = document.querySelector('iframe');
-      if (iframe) {
-        // Detectar cuando el iframe cambia de URL
-        let lastSrc = iframe.src;
-        setInterval(() => {
-          if (iframe.src !== lastSrc) {
-            console.log('🔄 El iframe cambió de URL:', iframe.src);
-            lastSrc = iframe.src;
-            // Volver a ejecutar el tracker
-            setTimeout(iniciarTracker, 1000);
-          }
-        }, 3000);
-      }
-
-      console.log('✅ Tracker de GasExpress cargado correctamente');
+      console.log('✅ Tracker de GasExpress cargado correctamente (SOLO EN INDEX)');
       console.log('💡 Para cambiar de versión, edita el src del iframe:');
       console.log('   - gas.html → Versión Normal');
       console.log('   - gasprueba.html → Versión de Prueba');
