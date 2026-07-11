@@ -3,178 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GasExpress | Página de Prueba</title>
-
-  <!-- ============================================================
-  CONTROL DE VERSIÓN - Script de configuración
-  ============================================================ -->
-  <script src="config.js"></script>
+  <title>GasExpress | Recarga de Pipetas a Domicilio</title>
 
   <!-- ============================================================
   ESTILOS - ARCHIVO EXTERNO
   ============================================================ -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- ============================================================
-  ⚠️ TRACKER ELIMINADO - Ahora está en index.html
-  ============================================================ -->
-
   <style>
-    .test-badge {
-      display: inline-block;
-      padding: 8px 20px;
-      border-radius: 50px;
-      background: #ff6b6b;
+    /* Estilos adicionales para la página principal */
+    .version-indicator {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: rgba(52, 58, 64, 0.9);
       color: white;
-      font-weight: 800;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-    .version-selector {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 30px 0;
-    }
-    .version-btn {
-      padding: 12px 30px;
+      padding: 8px 16px;
       border-radius: 50px;
-      border: 2px solid #343a40;
-      background: white;
-      color: #343a40;
+      font-size: 12px;
       font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s;
-      text-decoration: none;
-      font-size: 16px;
+      z-index: 999;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
     }
-    .version-btn:hover {
-      background: #343a40;
-      color: white;
-      transform: translateY(-3px);
-    }
-    .version-btn.active {
-      background: #343a40;
-      color: white;
-    }
-    .test-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      max-width: 800px;
-      margin: 40px auto;
-    }
-    .test-card {
-      padding: 30px;
-      border-radius: 16px;
-      background: white;
-      border: 1px solid #e9ecef;
-      transition: 0.3s;
-    }
-    .test-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
-    .test-card .icon {
-      font-size: 40px;
-      margin-bottom: 15px;
-    }
-    .test-card h3 {
-      color: #343a40;
-      margin-bottom: 10px;
-    }
-    .test-card p {
-      font-size: 14px;
+    .version-indicator span {
       color: #6c757d;
     }
   </style>
-
-  <!-- ============================================================
-  COOKIES
-  ============================================================ -->
-  <script>
-    (function() {
-      'use strict';
-
-      document.addEventListener('DOMContentLoaded', function() {
-        const overlay = document.getElementById('cookiesOverlay');
-        const mainContent = document.getElementById('mainContent');
-        const acceptBtn = document.getElementById('cookieAccept');
-        const rejectBtn = document.getElementById('cookieReject');
-
-        if (!overlay || !mainContent || !acceptBtn || !rejectBtn) {
-          console.error('❌ No se encontraron los elementos necesarios');
-          return;
-        }
-
-        function showMainContent() {
-          try {
-            overlay.style.display = 'none';
-            mainContent.style.display = 'block';
-            document.body.classList.add('cookies-accepted');
-            console.log('✅ Contenido mostrado correctamente (PRUEBA)');
-          } catch (error) {
-            console.error('❌ Error al mostrar contenido:', error);
-          }
-        }
-
-        overlay.style.display = 'flex';
-        mainContent.style.display = 'none';
-
-        acceptBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          showMainContent();
-        });
-
-        rejectBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          showMainContent();
-        });
-
-        overlay.addEventListener('click', function(e) {
-          if (e.target === overlay) {
-            showMainContent();
-          }
-        });
-
-        console.log('✅ Cookies: Siempre visibles al cargar la página (PRUEBA)');
-      });
-    })();
-  </script>
 </head>
 
 <body>
 
   <!-- ============================================================
-  COOKIES OVERLAY
+  INDICADOR DE VERSIÓN
   ============================================================ -->
-  <div id="cookiesOverlay" class="cookies-overlay">
-    <div class="cookies-container">
-      <div class="cookies-description">
-        Utilizamos cookies propias y de terceros para mejorar tu experiencia, analizar el tráfico y personalizar el contenido.
-        Para más información, consulta nuestra <a href="#privacidad">Política de Privacidad</a>.
-      </div>
-      <div class="cookies-divider"></div>
-      <div class="cookies-buttons">
-        <button id="cookieReject" class="btn-cookie btn-cookie-reject">Rechazar</button>
-        <button id="cookieAccept" class="btn-cookie btn-cookie-accept">Aceptar</button>
-      </div>
-      <div class="cookies-footer-text">Al continuar aceptas nuestra política de cookies</div>
-    </div>
+  <div class="version-indicator">
+    🟢 VERSIÓN <span>NORMAL</span>
   </div>
 
   <!-- ============================================================
-  CONTENIDO PRINCIPAL - PÁGINA DE PRUEBA
+  CONTENIDO PRINCIPAL
   ============================================================ -->
-  <div id="mainContent" style="display:none;">
+  <div id="mainContent">
     <div class="bg"></div>
     <div class="blob one"></div>
     <div class="blob two"></div>
     <div class="blob three"></div>
 
     <header>
-      <div class="logo">Gas<span>Express</span> <small style="font-size:14px; color:#ff6b6b;">| Prueba</small></div>
+      <div class="logo">Gas<span>Express</span></div>
       <nav>
         <a href="#inicio">Inicio</a>
         <a href="#servicios">Servicios</a>
@@ -185,21 +63,15 @@
 
     <section class="hero" id="inicio">
       <div>
-        <div class="test-badge">🧪 VERSIÓN DE PRUEBA</div>
-        <h1>Bienvenido a <span>GasExpress</span> <br><small style="font-size:30px; color:#6c757d;">Versión de Prueba</small></h1>
+        <div class="badge">Gas a domicilio en Bogotá y toda Colombia</div>
+        <h1>Recarga y venta de <span>pipetas de gas</span> con entrega rápida</h1>
         <p>
-          Esta es una página de prueba para validar funcionalidades y cambios antes de pasarlos a producción.
+          Llevamos gas seguro hasta tu hogar, restaurante, negocio o empresa.
+          Atención rápida, servicio confiable y cobertura en Bogotá y diferentes zonas de Colombia.
         </p>
-        
-        <div class="version-selector">
-          <a href="../gas.html" class="version-btn">🔵 Versión Normal</a>
-          <a href="../menu/index.html" class="version-btn">📋 Versión Menú</a>
-          <a href="#" class="version-btn active">🧪 Versión Prueba</a>
-        </div>
-
         <div class="buttons">
-          <a href="#servicios" class="btn main">Ver Características</a>
-          <a href="#contacto" class="btn second">Contactar</a>
+          <a href="#contacto" class="btn main">Pedir Recarga Ahora</a>
+          <a href="#servicios" class="btn second">Ver Servicios</a>
         </div>
       </div>
 
@@ -208,58 +80,91 @@
       </div>
     </section>
 
-    <section id="servicios" style="background: rgba(0, 0, 0, 0.02);">
-      <h2 class="title">Características de la <span>Versión de Prueba</span></h2>
-      <p class="subtitle">Aquí puedes probar nuevas funcionalidades sin afectar la versión principal.</p>
+    <section id="servicios">
+      <h2 class="title">Servicios <span>GasExpress</span></h2>
+      <p class="subtitle">Soluciones rápidas para hogares, restaurantes, tiendas, panaderías, fincas y negocios.</p>
 
-      <div class="test-grid">
-        <div class="test-card">
-          <div class="icon">🧪</div>
-          <h3>Pruebas A/B</h3>
-          <p>Espacio para probar nuevas características</p>
+      <div class="grid">
+        <div class="card">
+          <div class="icon">🔥</div>
+          <h3>Recarga de pipetas</h3>
+          <p>Recarga segura de pipetas de gas para uso doméstico, comercial y empresarial.</p>
         </div>
-        <div class="test-card">
-          <div class="icon">🔄</div>
-          <h3>Cambios Seguros</h3>
-          <p>Validar cambios antes de producción</p>
+
+        <div class="card">
+          <div class="icon">🚚</div>
+          <h3>Entrega a domicilio</h3>
+          <p>Llevamos tu pipeta hasta la puerta de tu casa o negocio con atención rápida.</p>
         </div>
-        <div class="test-card">
-          <div class="icon">📊</div>
-          <h3>Métricas</h3>
-          <p>Analizar comportamiento de usuarios</p>
+
+        <div class="card">
+          <div class="icon">🛒</div>
+          <h3>Venta de pipetas</h3>
+          <p>Venta de pipetas listas para usar, ideales para hogares y negocios.</p>
         </div>
-        <div class="test-card">
-          <div class="icon">🚀</div>
-          <h3>Lanzamiento</h3>
-          <p>Preparar nuevas versiones</p>
+
+        <div class="card">
+          <div class="icon">🏪</div>
+          <h3>Servicio para negocios</h3>
+          <p>Atendemos restaurantes, comidas rápidas, panaderías, tiendas y emprendimientos.</p>
         </div>
       </div>
     </section>
 
     <section class="highlight" id="beneficios">
-      <h2 class="title">Versiones <span>Disponibles</span></h2>
-      <p class="subtitle">Selecciona la versión que deseas probar.</p>
+      <h2 class="title">¿Por qué elegir <span>GasExpress?</span></h2>
+      <p class="subtitle">Más que vender gas, ofrecemos tranquilidad, rapidez y respaldo.</p>
 
       <div class="grid">
         <div class="card">
-          <div class="icon">🏠</div>
-          <h3>Versión Normal</h3>
-          <p>La versión principal de GasExpress con todos los servicios.</p>
-          <a href="../gas.html" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px;">Ir a Normal</a>
-        </div>
-
-        <div class="card" style="border-color: #ff6b6b;">
-          <div class="icon">🧪</div>
-          <h3>Versión Prueba</h3>
-          <p>Versión actual - Probando nuevas funcionalidades.</p>
-          <a href="#" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px; background:#ff6b6b;">Estás aquí</a>
+          <div class="icon">⚡</div>
+          <h3>Servicio rápido</h3>
+          <p>Ideal para cuando necesitas gas urgente en tu hogar o negocio.</p>
         </div>
 
         <div class="card">
-          <div class="icon">📋</div>
-          <h3>Versión Menú</h3>
-          <p>Versión con diseño de menú para servicios.</p>
-          <a href="../menu/index.html" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px;">Ir a Menú</a>
+          <div class="icon">🛡️</div>
+          <h3>Atención segura</h3>
+          <p>Manejo responsable y servicio confiable para cada cliente.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">📍</div>
+          <h3>Cobertura amplia</h3>
+          <p>Atención en Bogotá y ventas disponibles para distintas zonas de Colombia.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">💬</div>
+          <h3>Contacto directo</h3>
+          <p>Comunicación rápida por WhatsApp para coordinar tu pedido.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="title">Así funciona el <span>pedido</span></h2>
+      <p class="subtitle">Un proceso simple, rápido y pensado para tu comodidad.</p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>1. Solicitas</h3>
+          <p>Nos escribes por WhatsApp o completas el formulario.</p>
+        </div>
+
+        <div class="card">
+          <h3>2. Confirmamos</h3>
+          <p>Validamos ubicación, tipo de pipeta y disponibilidad.</p>
+        </div>
+
+        <div class="card">
+          <h3>3. Enviamos</h3>
+          <p>Coordinamos la entrega o recarga a domicilio.</p>
+        </div>
+
+        <div class="card">
+          <h3>4. Recibes</h3>
+          <p>Obtienes tu pipeta de gas lista para usar.</p>
         </div>
       </div>
     </section>
@@ -294,7 +199,7 @@
     </a>
 
     <footer>
-      <p><strong>GasExpress Colombia</strong> | Versión de Prueba 🧪</p>
+      <p><strong>GasExpress Colombia</strong></p>
       <p>Recarga y venta de pipetas de gas a domicilio en Bogotá y toda Colombia.</p>
     </footer>
   </div>
