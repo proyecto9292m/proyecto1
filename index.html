@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DomiGas | Recarga de Pipetas a Domicilio</title>
+  <title>GasExpress | Recarga de Pipetas a Domicilio</title>
 
   <!-- ============================================================
   ESTILOS - ARCHIVO EXTERNO
@@ -23,67 +23,84 @@
     // COOKIES OVERLAY - AMBOS BOTONES MUESTRAN EL CONTENIDO
     // ============================================================
     (function() {
-      const overlay = document.getElementById('cookiesOverlay');
-      const mainContent = document.getElementById('mainContent');
-      const acceptBtn = document.getElementById('cookieAccept');
-      const rejectBtn = document.getElementById('cookieReject');
+      'use strict';
 
-      // ============================================================
-      // FUNCIÓN PARA MOSTRAR EL CONTENIDO PRINCIPAL
-      // ============================================================
-      function showMainContent() {
-        // Guardar preferencia en localStorage
-        localStorage.setItem('cookieConsent', 'true');
-        
-        // Ocultar overlay
-        overlay.classList.add('hidden');
-        
-        // Mostrar contenido principal
-        mainContent.style.display = 'block';
-        
-        // Agregar clase al body
-        document.body.classList.add('cookies-accepted');
-      }
+      // Esperar a que el DOM esté listo
+      document.addEventListener('DOMContentLoaded', function() {
+        const overlay = document.getElementById('cookiesOverlay');
+        const mainContent = document.getElementById('mainContent');
+        const acceptBtn = document.getElementById('cookieAccept');
+        const rejectBtn = document.getElementById('cookieReject');
 
-      // ============================================================
-      // VERIFICAR SI YA HAY CONSENTIMIENTO
-      // ============================================================
-      const consent = localStorage.getItem('cookieConsent');
-
-      if (consent) {
-        // Si ya aceptó, mostrar contenido directamente
-        overlay.classList.add('hidden');
-        mainContent.style.display = 'block';
-        document.body.classList.add('cookies-accepted');
-      } else {
-        // Si no, mostrar overlay y ocultar contenido
-        overlay.classList.remove('hidden');
-        mainContent.style.display = 'none';
-      }
-
-      // ============================================================
-      // EVENTOS - AMBOS BOTONES MUESTRAN EL CONTENIDO
-      // ============================================================
-      // Botón ACEPTAR
-      acceptBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        showMainContent();
-      });
-
-      // Botón RECHAZAR - TAMBIÉN MUESTRA EL CONTENIDO
-      rejectBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        showMainContent();
-      });
-
-      // También si el usuario hace clic fuera del modal (opcional)
-      overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) {
-          showMainContent();
+        // Verificar que los elementos existan
+        if (!overlay || !mainContent || !acceptBtn || !rejectBtn) {
+          console.error('❌ No se encontraron los elementos necesarios');
+          return;
         }
-      });
 
-      console.log('✅ Cookies: Ambos botones muestran el contenido');
+        // ============================================================
+        // FUNCIÓN PARA MOSTRAR EL CONTENIDO PRINCIPAL
+        // ============================================================
+        function showMainContent() {
+          try {
+            // Guardar preferencia en localStorage
+            localStorage.setItem('cookieConsent', 'true');
+            
+            // Ocultar overlay
+            overlay.style.display = 'none';
+            
+            // Mostrar contenido principal
+            mainContent.style.display = 'block';
+            
+            // Agregar clase al body
+            document.body.classList.add('cookies-accepted');
+            
+            console.log('✅ Contenido mostrado correctamente');
+          } catch (error) {
+            console.error('❌ Error al mostrar contenido:', error);
+          }
+        }
+
+        // ============================================================
+        // VERIFICAR SI YA HAY CONSENTIMIENTO
+        // ============================================================
+        const consent = localStorage.getItem('cookieConsent');
+
+        if (consent) {
+          // Si ya aceptó, mostrar contenido directamente
+          overlay.style.display = 'none';
+          mainContent.style.display = 'block';
+          document.body.classList.add('cookies-accepted');
+        } else {
+          // Si no, mostrar overlay y ocultar contenido
+          overlay.style.display = 'flex';
+          mainContent.style.display = 'none';
+        }
+
+        // ============================================================
+        // EVENTOS - AMBOS BOTONES MUESTRAN EL CONTENIDO
+        // ============================================================
+        // Botón ACEPTAR
+        acceptBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          showMainContent();
+        });
+
+        // Botón RECHAZAR - TAMBIÉN MUESTRA EL CONTENIDO
+        rejectBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          showMainContent();
+        });
+
+        // También si el usuario hace clic fuera del modal
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) {
+            showMainContent();
+          }
+        });
+
+        console.log('✅ Cookies configuradas correctamente');
+      });
     })();
   </script>
 </head>
@@ -93,7 +110,7 @@
   <!-- ============================================================
   COOKIES OVERLAY
   ============================================================ -->
-  <div id="cookiesOverlay" class="cookies-overlay">
+  <div id="cookiesOverlay" class="cookies-overlay" style="display:flex;">
     <div class="cookies-container">
       <div class="cookies-description">
         Utilizamos cookies propias y de terceros para mejorar tu experiencia, analizar el tráfico y personalizar el contenido.
@@ -111,14 +128,14 @@
   <!-- ============================================================
   CONTENIDO PRINCIPAL
   ============================================================ -->
-  <div id="mainContent">
+  <div id="mainContent" style="display:none;">
     <div class="bg"></div>
     <div class="blob one"></div>
     <div class="blob two"></div>
     <div class="blob three"></div>
 
     <header>
-      <div class="logo">Domi<span>Gas</span></div>
+      <div class="logo">Gas<span>Express</span></div>
       <nav>
         <a href="#inicio">Inicio</a>
         <a href="#servicios">Servicios</a>
@@ -147,7 +164,7 @@
     </section>
 
     <section id="servicios">
-      <h2 class="title">Servicios <span>DomiGas</span></h2>
+      <h2 class="title">Servicios <span>GasExpress</span></h2>
       <p class="subtitle">Soluciones rápidas para hogares, restaurantes, tiendas, panaderías, fincas y negocios.</p>
 
       <div class="grid">
@@ -178,7 +195,7 @@
     </section>
 
     <section class="highlight" id="beneficios">
-      <h2 class="title">¿Por qué elegir <span>DomiGas?</span></h2>
+      <h2 class="title">¿Por qué elegir <span>GasExpress?</span></h2>
       <p class="subtitle">Más que vender gas, ofrecemos tranquilidad, rapidez y respaldo.</p>
 
       <div class="grid">
@@ -265,7 +282,7 @@
     </a>
 
     <footer>
-      <p><strong>DomiGas Colombia</strong></p>
+      <p><strong>GasExpress Colombia</strong></p>
       <p>Recarga y venta de pipetas de gas a domicilio en Bogotá y toda Colombia.</p>
     </footer>
   </div>
