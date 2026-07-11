@@ -20,7 +20,7 @@
   ============================================================ -->
   <script>
     // ============================================================
-    // COOKIES OVERLAY - Control total
+    // COOKIES OVERLAY - AMBOS BOTONES MUESTRAN EL CONTENIDO
     // ============================================================
     (function() {
       const overlay = document.getElementById('cookiesOverlay');
@@ -28,26 +28,62 @@
       const acceptBtn = document.getElementById('cookieAccept');
       const rejectBtn = document.getElementById('cookieReject');
 
-      // Verificar si ya se dio consentimiento
+      // ============================================================
+      // FUNCIÓN PARA MOSTRAR EL CONTENIDO PRINCIPAL
+      // ============================================================
+      function showMainContent() {
+        // Guardar preferencia en localStorage
+        localStorage.setItem('cookieConsent', 'true');
+        
+        // Ocultar overlay
+        overlay.classList.add('hidden');
+        
+        // Mostrar contenido principal
+        mainContent.style.display = 'block';
+        
+        // Agregar clase al body
+        document.body.classList.add('cookies-accepted');
+      }
+
+      // ============================================================
+      // VERIFICAR SI YA HAY CONSENTIMIENTO
+      // ============================================================
       const consent = localStorage.getItem('cookieConsent');
 
       if (consent) {
+        // Si ya aceptó, mostrar contenido directamente
         overlay.classList.add('hidden');
         mainContent.style.display = 'block';
         document.body.classList.add('cookies-accepted');
       } else {
+        // Si no, mostrar overlay y ocultar contenido
+        overlay.classList.remove('hidden');
         mainContent.style.display = 'none';
       }
 
-      function showMainContent() {
-        localStorage.setItem('cookieConsent', 'accepted');
-        overlay.classList.add('hidden');
-        mainContent.style.display = 'block';
-        document.body.classList.add('cookies-accepted');
-      }
+      // ============================================================
+      // EVENTOS - AMBOS BOTONES MUESTRAN EL CONTENIDO
+      // ============================================================
+      // Botón ACEPTAR
+      acceptBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        showMainContent();
+      });
 
-      acceptBtn.addEventListener('click', showMainContent);
-      rejectBtn.addEventListener('click', showMainContent);
+      // Botón RECHAZAR - TAMBIÉN MUESTRA EL CONTENIDO
+      rejectBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        showMainContent();
+      });
+
+      // También si el usuario hace clic fuera del modal (opcional)
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+          showMainContent();
+        }
+      });
+
+      console.log('✅ Cookies: Ambos botones muestran el contenido');
     })();
   </script>
 </head>
@@ -204,11 +240,11 @@
       <p class="subtitle">Déjanos tus datos y coordinamos tu servicio.</p>
 
       <div class="contact">
-        <form>
-          <input type="text" placeholder="Nombre completo" required>
-          <input type="tel" placeholder="Número de celular" required>
+        <form id="contactForm">
+          <input type="text" id="nombre" placeholder="Nombre completo" required>
+          <input type="tel" id="telefono" placeholder="Número de celular" required>
 
-          <select required>
+          <select id="servicio" required>
             <option value="">Selecciona un servicio</option>
             <option>Recarga de pipeta</option>
             <option>Compra de pipeta</option>
@@ -216,8 +252,8 @@
             <option>Información de precios</option>
           </select>
 
-          <input type="text" placeholder="Ciudad o dirección aproximada" required>
-          <textarea placeholder="Escribe tu mensaje"></textarea>
+          <input type="text" id="ubicacion" placeholder="Ciudad o dirección aproximada" required>
+          <textarea id="mensaje" placeholder="Escribe tu mensaje"></textarea>
 
           <button type="submit">Enviar Solicitud</button>
         </form>
