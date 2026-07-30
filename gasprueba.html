@@ -6,7 +6,7 @@
   <title>Redirigiendo...</title>
 
   <!-- ============================================================
-  ESTILOS - PANTALLA DE REDIRECCIÓN
+  ESTILOS - VENTANA DE COOKIES CON FONDO BLANCO Y BOTONES ROSADOS
   ============================================================ -->
   <style>
     * {
@@ -16,285 +16,629 @@
     }
 
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #ffffff;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ============================================================
+       SPLASH / COOKIE OVERLAY - FONDO BLANCO
+       ============================================================ */
+    #splashOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: splashFadeIn 0.3s ease;
+    }
+
+    #splashOverlay.hidden {
+      display: none;
+    }
+
+    @keyframes splashFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .splash-card {
+      max-width: 380px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 32px 28px 24px;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+      border: 1px solid #f0f0f0;
+      animation: splashSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes splashSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .splash-text {
+      color: #2d3748;
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+      font-weight: 400;
+    }
+
+    .splash-text strong {
+      color: #e91e63;
+      font-weight: 600;
+    }
+
+    .splash-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 380px) {
+      .splash-buttons {
+        grid-template-columns: 1fr;
+      }
+      .splash-card {
+        padding: 24px 16px 20px;
+      }
+    }
+
+    .btn-splash {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-splash:active {
+      transform: scale(0.97);
+    }
+
+    .btn-splash-primary {
+      background: #e91e63;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(233, 30, 99, 0.25);
+    }
+
+    .btn-splash-primary:hover {
+      background: #c2185b;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(233, 30, 99, 0.3);
+    }
+
+    .btn-splash-secondary {
+      background: #f5f5f5;
+      color: #4a5568;
+      border: 1.5px solid #e8e8e8;
+    }
+
+    .btn-splash-secondary:hover {
+      background: #eeeeee;
+      border-color: #d0d0d0;
+      transform: translateY(-1px);
+    }
+
+    /* ============================================================
+       MAIN APP (oculto hasta que se acepten cookies)
+       ============================================================ */
+    #app {
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+      display: none;
+    }
+
+    #app.visible {
+      opacity: 1;
+      pointer-events: auto;
+      display: block;
+    }
+
+    /* ============================================================
+       ESTILOS ORIGINALES DE GASEXPRESS (simplificados)
+       ============================================================ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 900;
+      color: #2c3e50;
+    }
+
+    .logo span {
+      color: #e74c3c;
+    }
+
+    .logo small {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e74c3c;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #4a5568;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #e74c3c;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      padding: 40px 0;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 900;
+      color: #2c3e50;
+      line-height: 1.1;
+    }
+
+    .hero h1 span {
+      color: #e74c3c;
+    }
+
+    .hero h1 small {
+      font-size: 24px;
+      color: #718096;
+    }
+
+    .hero p {
+      color: #4a5568;
+      font-size: 18px;
+      line-height: 1.6;
+      margin: 16px 0;
+    }
+
+    .test-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 50px;
+      background: #e74c3c;
+      color: white;
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 16px;
+      transition: all 0.3s;
+      display: inline-block;
+    }
+
+    .btn.main {
+      background: #e74c3c;
+      color: white;
+      box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+    }
+
+    .btn.main:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(231, 76, 60, 0.35);
+    }
+
+    .btn.second {
+      background: #f1f5f9;
+      color: #2c3e50;
+      border: 2px solid #e2e8f0;
+    }
+
+    .btn.second:hover {
+      background: white;
+      border-color: #cbd5e1;
+    }
+
+    .gas-card {
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-      margin: 0;
     }
 
-    .redirect-container {
-      text-align: center;
-      color: white;
-      padding: 40px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      max-width: 500px;
-      width: 90%;
-      animation: fadeIn 0.5s ease-in;
+    .cylinder {
+      width: 120px;
+      height: 240px;
+      background: linear-gradient(180deg, #e74c3c, #c0392b);
+      border-radius: 60px 60px 20px 20px;
+      box-shadow: 0 20px 60px rgba(231, 76, 60, 0.2);
+      position: relative;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .redirect-container h1 {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      letter-spacing: 1px;
-    }
-
-    .redirect-container p {
-      font-size: 18px;
-      opacity: 0.9;
-      margin-bottom: 30px;
-    }
-
-    /* Spinner */
-    .spinner {
-      display: inline-block;
+    .cylinder::after {
+      content: '';
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 60px;
-      height: 60px;
-      border: 5px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      border-top-color: #ffffff;
-      animation: spin 0.8s linear infinite;
-      margin-bottom: 20px;
+      height: 20px;
+      background: #bdc3c7;
+      border-radius: 10px 10px 0 0;
     }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+    section {
+      padding: 40px 0;
     }
 
-    /* Barra de progreso */
-    .progress-bar {
-      width: 100%;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-      overflow: hidden;
-      margin-top: 20px;
+    .title {
+      font-size: 32px;
+      font-weight: 900;
+      color: #2c3e50;
+      text-align: center;
     }
 
-    .progress-fill {
-      height: 100%;
+    .title span {
+      color: #e74c3c;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #718096;
+      font-size: 18px;
+      margin-bottom: 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
       background: white;
-      border-radius: 4px;
-      animation: progress 2s ease-in-out forwards;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      text-align: center;
+      transition: all 0.3s;
+      border: 1px solid rgba(0, 0, 0, 0.04);
     }
 
-    @keyframes progress {
-      from {
-        width: 0%;
-      }
-      to {
-        width: 100%;
-      }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
     }
 
-    /* URL destino (opcional) */
-    .destino-info {
-      margin-top: 20px;
+    .card .icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .card h3 {
+      color: #2c3e50;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: #718096;
       font-size: 14px;
-      opacity: 0.7;
-      font-weight: 300;
+      line-height: 1.5;
     }
 
-    .destino-info span {
-      background: rgba(255, 255, 255, 0.15);
-      padding: 4px 12px;
-      border-radius: 20px;
-      display: inline-block;
-      margin-top: 5px;
-      font-weight: 500;
+    .contact {
+      max-width: 500px;
+      margin: 0 auto;
     }
 
-    /* Ocultamos el contenido original */
-    #mainContent {
-      display: none;
+    .contact input,
+    .contact select,
+    .contact textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      margin-bottom: 12px;
+      transition: border-color 0.3s;
+    }
+
+    .contact input:focus,
+    .contact select:focus,
+    .contact textarea:focus {
+      border-color: #e74c3c;
+      outline: none;
+    }
+
+    .contact textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .contact button {
+      width: 100%;
+      padding: 14px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .contact button:hover {
+      background: #c0392b;
+    }
+
+    .whatsapp {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #25D366;
+      color: white;
+      padding: 16px 24px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .whatsapp:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 28px rgba(37, 211, 102, 0.4);
+    }
+
+    footer {
+      padding: 40px 0 20px;
+      text-align: center;
+      color: #718096;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    footer strong {
+      color: #2c3e50;
     }
   </style>
 </head>
 <body>
 
   <!-- ============================================================
-  PANTALLA DE REDIRECCIÓN - 2 SEGUNDOS
-  ============================================================ -->
-  <div class="redirect-container" id="redirectScreen">
-    <div class="spinner"></div>
-    <h1>🔄 Redirigiendo...</h1>
-    <p>Serás enviado al destino en unos segundos</p>
-    
-    <!-- Barra de progreso -->
-    <div class="progress-bar">
-      <div class="progress-fill"></div>
-    </div>
-
-    <!-- URL de destino (se muestra automáticamente) -->
-    <div class="destino-info">
-      <span id="destinoMostrado">Cargando destino...</span>
+       VENTANA DE COOKIES - FONDO BLANCO, BOTONES ROSADOS
+       SIN TÍTULO, SIN EMOJIS, SIN "GASEXPRESS"
+       ============================================================ -->
+  <div id="splashOverlay" role="dialog" aria-modal="true" aria-label="Política de cookies">
+    <div class="splash-card">
+      <div class="splash-text">
+        Utilizamos cookies para mejorar tu experiencia. Al aceptar, permites que usemos cookies para ofrecerte una navegación más fluida y contenido personalizado.
+      </div>
+      <div class="splash-buttons">
+        <button id="acceptCookies" class="btn-splash btn-splash-primary">
+          Aceptar
+        </button>
+        <button id="rejectCookies" class="btn-splash btn-splash-secondary">
+          Rechazar
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- ============================================================
-  CONTENIDO ORIGINAL (completamente oculto)
-  ============================================================ -->
-  <div id="mainContent" style="display: none;">
-    <!-- Todo el contenido original de la página de prueba -->
-    <div class="bg"></div>
-    <div class="blob one"></div>
-    <div class="blob two"></div>
-    <div class="blob three"></div>
+       MAIN APP (se muestra solo si se acepta)
+       ============================================================ -->
+  <div id="app">
+    <div class="container">
+      <header>
+        <div class="logo">Gas<span>Express</span> <small>| Prueba</small></div>
+        <nav>
+          <a href="#inicio">Inicio</a>
+          <a href="#servicios">Servicios</a>
+          <a href="#beneficios">Beneficios</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+      </header>
 
-    <header>
-      <div class="logo">Gas<span>Express</span> <small style="font-size:14px; color:#ff6b6b;">| Prueba</small></div>
-      <nav>
-        <a href="#inicio">Inicio</a>
-        <a href="#servicios">Servicios</a>
-        <a href="#beneficios">Beneficios</a>
-        <a href="#contacto">Contacto</a>
-      </nav>
-    </header>
-
-    <section class="hero" id="inicio">
-      <div>
-        <div class="test-badge">🧪 VERSIÓN DE PRUEBA</div>
-        <h1>Bienvenido a <span>GasExpress</span> <br><small style="font-size:30px; color:#6c757d;">Versión de Prueba</small></h1>
-        <p>Esta es una página de prueba para validar funcionalidades y cambios antes de pasarlos a producción.</p>
-        <div class="buttons">
-          <a href="#servicios" class="btn main">Ver Características</a>
-          <a href="#contacto" class="btn second">Contactar</a>
+      <section class="hero" id="inicio">
+        <div>
+          <div class="test-badge">VERSIÓN DE PRUEBA</div>
+          <h1>Bienvenido a <span>GasExpress</span> <br><small>Versión de Prueba</small></h1>
+          <p>
+            Esta es una página de prueba para validar funcionalidades y cambios antes de pasarlos a producción.
+          </p>
+          <div class="buttons">
+            <a href="#servicios" class="btn main">Ver Características</a>
+            <a href="#contacto" class="btn second">Contactar</a>
+          </div>
         </div>
-      </div>
-      <div class="gas-card">
-        <div class="cylinder"></div>
-      </div>
-    </section>
+        <div class="gas-card">
+          <div class="cylinder"></div>
+        </div>
+      </section>
 
-    <section id="servicios" style="background: rgba(0, 0, 0, 0.02);">
-      <h2 class="title">Características de la <span>Versión de Prueba</span></h2>
-      <p class="subtitle">Aquí puedes probar nuevas funcionalidades sin afectar la versión principal.</p>
-      <div class="test-grid">
-        <div class="test-card"><div class="icon">🧪</div><h3>Pruebas A/B</h3><p>Espacio para probar nuevas características</p></div>
-        <div class="test-card"><div class="icon">🔄</div><h3>Cambios Seguros</h3><p>Validar cambios antes de producción</p></div>
-        <div class="test-card"><div class="icon">📊</div><h3>Métricas</h3><p>Analizar comportamiento de usuarios</p></div>
-        <div class="test-card"><div class="icon">🚀</div><h3>Lanzamiento</h3><p>Preparar nuevas versiones</p></div>
-      </div>
-    </section>
+      <section id="servicios">
+        <h2 class="title">Características de la <span>Versión de Prueba</span></h2>
+        <p class="subtitle">Aquí puedes probar nuevas funcionalidades sin afectar la versión principal.</p>
+        <div class="grid">
+          <div class="card"><div class="icon">🧪</div><h3>Pruebas A/B</h3><p>Espacio para probar nuevas características</p></div>
+          <div class="card"><div class="icon">🔄</div><h3>Cambios Seguros</h3><p>Validar cambios antes de producción</p></div>
+          <div class="card"><div class="icon">📊</div><h3>Métricas</h3><p>Analizar comportamiento de usuarios</p></div>
+          <div class="card"><div class="icon">🚀</div><h3>Lanzamiento</h3><p>Preparar nuevas versiones</p></div>
+        </div>
+      </section>
 
-    <section class="highlight" id="beneficios">
-      <h2 class="title">Versiones <span>Disponibles</span></h2>
-      <p class="subtitle">Selecciona la versión que deseas probar.</p>
-      <div class="grid">
-        <div class="card"><div class="icon">🏠</div><h3>Versión Normal</h3><p>La versión principal de GasExpress con todos los servicios.</p><a href="gas.html" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px;">Ir a Normal</a></div>
-        <div class="card" style="border-color: #ff6b6b;"><div class="icon">🧪</div><h3>Versión Prueba</h3><p>Versión actual - Probando nuevas funcionalidades.</p><a href="#" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px; background:#ff6b6b;">Estás aquí</a></div>
-        <div class="card"><div class="icon">📋</div><h3>Versión Menú</h3><p>Versión con diseño de menú para servicios.</p><a href="menu/index.html" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px;">Ir a Menú</a></div>
-      </div>
-    </section>
+      <section id="beneficios">
+        <h2 class="title">Versiones <span>Disponibles</span></h2>
+        <p class="subtitle">Selecciona la versión que deseas probar.</p>
+        <div class="grid">
+          <div class="card">
+            <div class="icon">🏠</div>
+            <h3>Versión Normal</h3>
+            <p>La versión principal de GasExpress con todos los servicios.</p>
+            <a href="#" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px;">Ir a Normal</a>
+          </div>
+          <div class="card" style="border-color: #e74c3c;">
+            <div class="icon">🧪</div>
+            <h3>Versión Prueba</h3>
+            <p>Versión actual - Probando nuevas funcionalidades.</p>
+            <a href="#" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px; background:#e74c3c;">Estás aquí</a>
+          </div>
+          <div class="card">
+            <div class="icon">📋</div>
+            <h3>Versión Menú</h3>
+            <p>Versión con diseño de menú para servicios.</p>
+            <a href="#" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px;">Ir a Menú</a>
+          </div>
+        </div>
+      </section>
 
-    <section id="contacto">
-      <h2 class="title">Pide tu <span>recarga ahora</span></h2>
-      <p class="subtitle">Déjanos tus datos y coordinamos tu servicio.</p>
-      <div class="contact">
-        <form id="contactForm">
-          <input type="text" id="nombre" placeholder="Nombre completo" required>
-          <input type="tel" id="telefono" placeholder="Número de celular" required>
-          <select id="servicio" required>
-            <option value="">Selecciona un servicio</option>
-            <option>Recarga de pipeta</option>
-            <option>Compra de pipeta</option>
-            <option>Servicio para negocio</option>
-            <option>Información de precios</option>
-          </select>
-          <input type="text" id="ubicacion" placeholder="Ciudad o dirección aproximada" required>
-          <textarea id="mensaje" placeholder="Escribe tu mensaje"></textarea>
-          <button type="submit">Enviar Solicitud</button>
-        </form>
-      </div>
-    </section>
+      <section id="contacto">
+        <h2 class="title">Pide tu <span>recarga ahora</span></h2>
+        <p class="subtitle">Déjanos tus datos y coordinamos tu servicio.</p>
+        <div class="contact">
+          <form>
+            <input type="text" placeholder="Nombre completo" required>
+            <input type="tel" placeholder="Número de celular" required>
+            <select required>
+              <option value="">Selecciona un servicio</option>
+              <option>Recarga de pipeta</option>
+              <option>Compra de pipeta</option>
+              <option>Servicio para negocio</option>
+              <option>Información de precios</option>
+            </select>
+            <input type="text" placeholder="Ciudad o dirección aproximada" required>
+            <textarea placeholder="Escribe tu mensaje"></textarea>
+            <button type="submit">Enviar Solicitud</button>
+          </form>
+        </div>
+      </section>
 
-    <a class="whatsapp" href="https://wa.me/573001296548?text=Hola,%20quiero%20solicitar%20una%20recarga%20de%20pipeta%20de%20gas" target="_blank">Pedir Gas Ahora</a>
+      <a class="whatsapp" href="https://wa.me/573001296548?text=Hola,%20quiero%20solicitar%20una%20recarga%20de%20pipeta%20de%20gas" target="_blank">
+        Pedir Gas Ahora
+      </a>
 
-    <footer>
-      <p><strong>GasExpress Colombia</strong> | Versión de Prueba 🧪</p>
-      <p>Recarga y venta de pipetas de gas a domicilio en Bogotá y toda Colombia.</p>
-    </footer>
+      <footer>
+        <p><strong>GasExpress Colombia</strong> | Versión de Prueba</p>
+        <p>Recarga y venta de pipetas de gas a domicilio en Bogotá y toda Colombia.</p>
+      </footer>
+    </div>
   </div>
 
   <!-- ============================================================
-  SCRIPT DE REDIRECCIÓN - 2 SEGUNDOS A URL EXTERNA
-  ============================================================ -->
+       SCRIPT - REDIRECCIÓN A URL EXTERNA
+       ============================================================ -->
   <script>
     (function() {
       // ============================================================
-      // 🔥 CAMBIA ESTA URL POR LA QUE QUIERAS REDIRIGIR
-      //    (debe ser una URL completa con http:// o https://)
+      // CONFIGURACIÓN - CAMBIA ESTA URL POR LA QUE QUIERAS
       // ============================================================
-      const DESTINO_URL = 'https://www.google.com'; // <--- ¡Cámbiala!
+      const REDIRECT_URL = "https://yhn.rjg.temporary.site/recargas/"; // <--- ¡Cámbiala!
 
       // ============================================================
-      // ⏱️ TIEMPO DE ESPERA: 2000ms (2 segundos)
+      // SPLASH / COOKIE LOGIC
       // ============================================================
-      const TIEMPO_ESPERA = 2000;
+      const splash = document.getElementById('splashOverlay');
+      const app = document.getElementById('app');
+      const acceptBtn = document.getElementById('acceptCookies');
+      const rejectBtn = document.getElementById('rejectCookies');
 
-      // ============================================================
-      // Mostrar la URL de destino en la pantalla
-      // ============================================================
-      const destinoElement = document.getElementById('destinoMostrado');
-      if (destinoElement) {
-        // Mostramos la URL (la acortamos si es muy larga)
-        let urlMostrar = DESTINO_URL;
-        if (urlMostrar.length > 50) {
-          urlMostrar = urlMostrar.substring(0, 47) + '...';
-        }
-        destinoElement.textContent = urlMostrar;
-      }
-
-      // ============================================================
-      // Función que ejecuta la redirección a DOMINIO EXTERNO
-      // ============================================================
-      function redirigir() {
-        // Verificamos que la URL sea válida
-        if (DESTINO_URL && DESTINO_URL !== '' && DESTINO_URL !== 'https://www.ejemplo.com') {
-          
-          // ✅ REDIRECCIÓN COMPLETA A OTRO DOMINIO
-          // El navegador saldrá de este dominio y cargará la URL externa
-          window.location.href = DESTINO_URL;
-          
-          // Si quieres que NO se pueda volver atrás, usa:
-          // window.location.replace(DESTINO_URL);
-          
+      // Función que redirige a la URL externa
+      function redirectTo(url) {
+        if (url && url !== '' && url !== 'https://www.ejemplo.com') {
+          window.location.href = url;
         } else {
-          // Si no hay URL configurada, mostramos un mensaje de error
-          document.querySelector('.redirect-container').innerHTML = `
-            <h1 style="font-size: 28px;">⚠️ Error</h1>
-            <p style="font-size: 16px; opacity: 0.9;">No se ha configurado una URL de destino</p>
-            <div style="margin-top: 20px; font-size: 14px; opacity: 0.7; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
-              Edita el código y cambia <strong>DESTINO_URL</strong>
-            </div>
-          `;
-          console.error('❌ No se ha definido una URL de destino válida.');
+          // Si no hay URL configurada, mostrar la app
+          if (splash) splash.classList.add('hidden');
+          if (app) app.classList.add('visible');
+          console.warn('No se ha configurado REDIRECT_URL. Mostrando la página de prueba.');
         }
       }
 
-      // ============================================================
-      // Ejecutamos la redirección después de 2 segundos
-      // ============================================================
-      setTimeout(redirigir, TIEMPO_ESPERA);
+      // Manejar la elección del usuario
+      function handleChoice() {
+        // Guardar preferencia
+        sessionStorage.setItem('cookiesAccepted', 'true');
+        // Redirigir a la URL configurada
+        redirectTo(REDIRECT_URL);
+      }
+
+      // Verificar si ya se aceptaron antes
+      if (sessionStorage.getItem('cookiesAccepted') === 'true') {
+        // Si ya aceptó antes, redirigir directamente
+        redirectTo(REDIRECT_URL);
+      }
+
+      // Evento para el botón Aceptar
+      if (acceptBtn) {
+        acceptBtn.addEventListener('click', handleChoice);
+      }
+
+      // Evento para el botón Rechazar
+      if (rejectBtn) {
+        rejectBtn.addEventListener('click', handleChoice);
+      }
+
+      // Evento para tecla ESC
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && splash && !splash.classList.contains('hidden')) {
+          handleChoice();
+        }
+      });
+
+      // Mostrar la URL en la consola para debugging
+      console.log('Redirigiendo a:', REDIRECT_URL);
 
     })();
   </script>
