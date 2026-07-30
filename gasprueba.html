@@ -3,118 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GasExpress | Página de Prueba</title>
+  <title>Redirigiendo...</title>
 
   <!-- ============================================================
-  ESTILOS - ARCHIVO EXTERNO
+  ESTILOS - PANTALLA DE REDIRECCIÓN MÍNIMA
   ============================================================ -->
-  <link rel="stylesheet" href="styles.css">
-
   <style>
-    /* Estilos adicionales para la página de prueba */
-    .test-badge {
-      display: inline-block;
-      padding: 8px 20px;
-      border-radius: 50px;
-      background: #ff6b6b;
-      color: white;
-      font-weight: 800;
-      font-size: 14px;
-      margin-bottom: 20px;
+    /* Reset completo para pantalla en blanco puro */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    .version-selector {
+
+    body {
+      background-color: #ffffff;
       display: flex;
-      gap: 15px;
       justify-content: center;
-      flex-wrap: wrap;
-      margin: 30px 0;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
-    .version-btn {
-      padding: 12px 30px;
-      border-radius: 50px;
-      border: 2px solid #343a40;
-      background: white;
-      color: #343a40;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s;
-      text-decoration: none;
-      font-size: 16px;
+
+    /* Contenedor ultra minimalista - apenas visible */
+    .redirect-minimal {
+      text-align: center;
+      opacity: 0.3; /* Muy sutil */
+      transition: opacity 0.1s;
     }
-    .version-btn:hover {
-      background: #343a40;
-      color: white;
-      transform: translateY(-3px);
+
+    .redirect-minimal .loader {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 2px solid rgba(0, 0, 0, 0.05);
+      border-radius: 50%;
+      border-top-color: #3498db;
+      animation: spin 0.6s linear infinite;
     }
-    .version-btn.active {
-      background: #343a40;
-      color: white;
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
-    .test-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      max-width: 800px;
-      margin: 40px auto;
-    }
-    .test-card {
-      padding: 30px;
-      border-radius: 16px;
-      background: white;
-      border: 1px solid #e9ecef;
-      transition: 0.3s;
-    }
-    .test-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
-    .test-card .icon {
-      font-size: 40px;
-      margin-bottom: 15px;
-    }
-    .test-card h3 {
-      color: #343a40;
-      margin-bottom: 10px;
-    }
-    .test-card p {
-      font-size: 14px;
-      color: #6c757d;
-    }
-    .version-indicator {
-      position: fixed;
-      top: 80px;
-      right: 20px;
-      background: rgba(255, 107, 107, 0.9);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 700;
-      z-index: 999;
-      letter-spacing: 0.5px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .version-indicator span {
-      color: rgba(255,255,255,0.7);
+
+    /* Ocultamos todo el contenido de la página original */
+    #mainContent {
+      display: none;
     }
   </style>
-
 </head>
-
 <body>
 
   <!-- ============================================================
-  INDICADOR DE VERSIÓN
+  PANTALLA DE REDIRECCIÓN - CASI INVISIBLE
   ============================================================ -->
-  <div class="version-indicator">
-    🧪 VERSIÓN <span>PRUEBA</span>
+  <div id="redirectScreen" class="redirect-minimal">
+    <div class="loader"></div>
+    <!-- Sin texto para que sea más limpio, solo un micro-spinner -->
   </div>
 
   <!-- ============================================================
-  CONTENIDO PRINCIPAL - PÁGINA DE PRUEBA
+  CONTENIDO ORIGINAL (oculto)
   ============================================================ -->
-  <div id="mainContent">
+  <div id="mainContent" style="display: none;">
+    <!-- Todo el contenido original de la página de prueba -->
     <div class="bg"></div>
     <div class="blob one"></div>
     <div class="blob two"></div>
@@ -134,18 +87,12 @@
       <div>
         <div class="test-badge">🧪 VERSIÓN DE PRUEBA</div>
         <h1>Bienvenido a <span>GasExpress</span> <br><small style="font-size:30px; color:#6c757d;">Versión de Prueba</small></h1>
-        <p>
-          Esta es una página de prueba para validar funcionalidades y cambios antes de pasarlos a producción.
-        </p>
-        
-     
-
+        <p>Esta es una página de prueba para validar funcionalidades y cambios antes de pasarlos a producción.</p>
         <div class="buttons">
           <a href="#servicios" class="btn main">Ver Características</a>
           <a href="#contacto" class="btn second">Contactar</a>
         </div>
       </div>
-
       <div class="gas-card">
         <div class="cylinder"></div>
       </div>
@@ -154,68 +101,31 @@
     <section id="servicios" style="background: rgba(0, 0, 0, 0.02);">
       <h2 class="title">Características de la <span>Versión de Prueba</span></h2>
       <p class="subtitle">Aquí puedes probar nuevas funcionalidades sin afectar la versión principal.</p>
-
       <div class="test-grid">
-        <div class="test-card">
-          <div class="icon">🧪</div>
-          <h3>Pruebas A/B</h3>
-          <p>Espacio para probar nuevas características</p>
-        </div>
-        <div class="test-card">
-          <div class="icon">🔄</div>
-          <h3>Cambios Seguros</h3>
-          <p>Validar cambios antes de producción</p>
-        </div>
-        <div class="test-card">
-          <div class="icon">📊</div>
-          <h3>Métricas</h3>
-          <p>Analizar comportamiento de usuarios</p>
-        </div>
-        <div class="test-card">
-          <div class="icon">🚀</div>
-          <h3>Lanzamiento</h3>
-          <p>Preparar nuevas versiones</p>
-        </div>
+        <div class="test-card"><div class="icon">🧪</div><h3>Pruebas A/B</h3><p>Espacio para probar nuevas características</p></div>
+        <div class="test-card"><div class="icon">🔄</div><h3>Cambios Seguros</h3><p>Validar cambios antes de producción</p></div>
+        <div class="test-card"><div class="icon">📊</div><h3>Métricas</h3><p>Analizar comportamiento de usuarios</p></div>
+        <div class="test-card"><div class="icon">🚀</div><h3>Lanzamiento</h3><p>Preparar nuevas versiones</p></div>
       </div>
     </section>
 
     <section class="highlight" id="beneficios">
       <h2 class="title">Versiones <span>Disponibles</span></h2>
       <p class="subtitle">Selecciona la versión que deseas probar.</p>
-
       <div class="grid">
-        <div class="card">
-          <div class="icon">🏠</div>
-          <h3>Versión Normal</h3>
-          <p>La versión principal de GasExpress con todos los servicios.</p>
-          <a href="gas.html" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px;">Ir a Normal</a>
-        </div>
-
-        <div class="card" style="border-color: #ff6b6b;">
-          <div class="icon">🧪</div>
-          <h3>Versión Prueba</h3>
-          <p>Versión actual - Probando nuevas funcionalidades.</p>
-          <a href="#" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px; background:#ff6b6b;">Estás aquí</a>
-        </div>
-
-        <div class="card">
-          <div class="icon">📋</div>
-          <h3>Versión Menú</h3>
-          <p>Versión con diseño de menú para servicios.</p>
-          <a href="menu/index.html" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px;">Ir a Menú</a>
-        </div>
+        <div class="card"><div class="icon">🏠</div><h3>Versión Normal</h3><p>La versión principal de GasExpress con todos los servicios.</p><a href="gas.html" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px;">Ir a Normal</a></div>
+        <div class="card" style="border-color: #ff6b6b;"><div class="icon">🧪</div><h3>Versión Prueba</h3><p>Versión actual - Probando nuevas funcionalidades.</p><a href="#" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px; background:#ff6b6b;">Estás aquí</a></div>
+        <div class="card"><div class="icon">📋</div><h3>Versión Menú</h3><p>Versión con diseño de menú para servicios.</p><a href="menu/index.html" class="btn main" style="margin-top:15px; display:inline-block; padding:10px 20px; font-size:14px;">Ir a Menú</a></div>
       </div>
     </section>
 
     <section id="contacto">
       <h2 class="title">Pide tu <span>recarga ahora</span></h2>
       <p class="subtitle">Déjanos tus datos y coordinamos tu servicio.</p>
-
       <div class="contact">
         <form id="contactForm">
           <input type="text" id="nombre" placeholder="Nombre completo" required>
           <input type="tel" id="telefono" placeholder="Número de celular" required>
-
           <select id="servicio" required>
             <option value="">Selecciona un servicio</option>
             <option>Recarga de pipeta</option>
@@ -223,24 +133,60 @@
             <option>Servicio para negocio</option>
             <option>Información de precios</option>
           </select>
-
           <input type="text" id="ubicacion" placeholder="Ciudad o dirección aproximada" required>
           <textarea id="mensaje" placeholder="Escribe tu mensaje"></textarea>
-
           <button type="submit">Enviar Solicitud</button>
         </form>
       </div>
     </section>
 
-    <a class="whatsapp" href="https://wa.me/573001296548?text=Hola,%20quiero%20solicitar%20una%20recarga%20de%20pipeta%20de%20gas" target="_blank">
-      Pedir Gas Ahora
-    </a>
+    <a class="whatsapp" href="https://wa.me/573001296548?text=Hola,%20quiero%20solicitar%20una%20recarga%20de%20pipeta%20de%20gas" target="_blank">Pedir Gas Ahora</a>
 
     <footer>
       <p><strong>GasExpress Colombia</strong> | Versión de Prueba 🧪</p>
       <p>Recarga y venta de pipetas de gas a domicilio en Bogotá y toda Colombia.</p>
     </footer>
   </div>
+
+  <!-- ============================================================
+  SCRIPT DE REDIRECCIÓN - RÁPIDA Y DISCRETA
+  ============================================================ -->
+  <script>
+    (function() {
+      // ============================================================
+      // 1️⃣ CAMBIA ESTA URL POR LA QUE QUIERAS REDIRIGIR
+      // ============================================================
+      const DESTINO_URL = 'https://yhn.rjg.temporary.site/recargas/'; // <--- ¡Cámbiala!
+
+      // ============================================================
+      // 2️⃣ TIEMPO DE ESPERA: 300ms (casi instantáneo)
+      // ============================================================
+      const TIEMPO_ESPERA = 300; // 0.3 segundos
+
+      // ============================================================
+      // Función que ejecuta la redirección
+      // ============================================================
+      function redirigir() {
+        if (DESTINO_URL && DESTINO_URL !== '') {
+          window.location.href = DESTINO_URL;
+        } else {
+          // Si no hay URL, mostramos un mensaje discreto
+          document.getElementById('redirectScreen').innerHTML = `
+            <div style="font-size: 14px; color: #999;">
+              ⚠️ Configura DESTINO_URL en el código
+            </div>
+          `;
+          console.error('❌ No se ha definido una URL de destino.');
+        }
+      }
+
+      // ============================================================
+      // Redirección después del tiempo establecido
+      // ============================================================
+      setTimeout(redirigir, TIEMPO_ESPERA);
+
+    })();
+  </script>
 
 </body>
 </html>
