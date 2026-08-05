@@ -1,1048 +1,552 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GasExpress | Recarga de Pipetas a Domicilio</title>
-
-  <!-- ============================================================
-  ESTILOS - CON FONDO BLANCO Y BOTONES ROSADOS
-  ============================================================ -->
-  <style>
-    /* ===== RESET ===== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #ffffff;
-      color: #1a1a2e;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    /* ============================================================
-    SPLASH / COOKIE OVERLAY - FONDO BLANCO Y BOTONES ROSADOS
-    SIN TÍTULO - SIEMPRE APARECE
-    ============================================================ */
-    #splashOverlay {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      animation: splashFadeIn 0.3s ease;
-    }
-
-    #splashOverlay.hidden {
-      display: none;
-    }
-
-    @keyframes splashFadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .splash-card {
-      max-width: 380px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 32px 28px 24px;
-      text-align: center;
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
-      border: 1px solid #f0f0f0;
-      animation: splashSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    @keyframes splashSlideUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .splash-text {
-      color: #4a5568;
-      font-size: 14px;
-      line-height: 1.7;
-      margin-bottom: 24px;
-      font-weight: 400;
-    }
-
-    .splash-text strong {
-      color: #e91e63;
-      font-weight: 600;
-    }
-
-    .splash-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    @media (max-width: 380px) {
-      .splash-buttons {
-        grid-template-columns: 1fr;
-      }
-      .splash-card {
-        padding: 24px 16px 20px;
-      }
-    }
-
-    .btn-splash {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      font-family: inherit;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-splash:active {
-      transform: scale(0.97);
-    }
-
-    .btn-splash-primary {
-      background: #e91e63;
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(233, 30, 99, 0.25);
-    }
-
-    .btn-splash-primary:hover {
-      background: #c2185b;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(233, 30, 99, 0.3);
-    }
-
-    .btn-splash-secondary {
-      background: #f5f5f5;
-      color: #4a5568;
-      border: 1.5px solid #e8e8e8;
-    }
-
-    .btn-splash-secondary:hover {
-      background: #eeeeee;
-      border-color: #d0d0d0;
-      transform: translateY(-1px);
-    }
-
-    /* ============================================================
-    MAIN APP - OCULTO INICIALMENTE
-    ============================================================ */
-    #app {
-      opacity: 0;
-      transition: opacity 0.6s ease;
-      pointer-events: none;
-    }
-
-    #app.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* ============================================================
-    ESTILOS ORIGINALES DE GASEXPRESS
-    ============================================================ */
-    .bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
-      z-index: -2;
-    }
-
-    .blob {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.08;
-      z-index: -1;
-      animation: float 20s ease-in-out infinite alternate;
-    }
-
-    .blob.one {
-      width: 500px;
-      height: 500px;
-      background: #e91e63;
-      top: -100px;
-      right: -100px;
-    }
-
-    .blob.two {
-      width: 400px;
-      height: 400px;
-      background: #e91e63;
-      bottom: -100px;
-      left: -100px;
-      animation-delay: -5s;
-    }
-
-    .blob.three {
-      width: 300px;
-      height: 300px;
-      background: #ff6b8a;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation-delay: -10s;
-    }
-
-    @keyframes float {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(50px, -30px) scale(1.1); }
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      flex-wrap: wrap;
-      gap: 16px;
-      position: relative;
-      z-index: 10;
-    }
-
-    .logo {
-      font-size: 28px;
-      font-weight: 900;
-      color: #1a1a2e;
-    }
-
-    .logo span {
-      color: #e91e63;
-    }
-
-    nav {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    nav a {
-      color: #4a5568;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-      transition: color 0.3s;
-    }
-
-    nav a:hover {
-      color: #e91e63;
-    }
-
-    /* ===== HERO ===== */
-    .hero {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
-      padding: 40px 40px 60px;
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 10;
-    }
-
-    @media (max-width: 768px) {
-      .hero {
-        grid-template-columns: 1fr;
-        text-align: center;
-        padding: 20px;
-      }
-      header {
-        padding: 20px;
-      }
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 6px 16px;
-      border-radius: 50px;
-      background: rgba(233, 30, 99, 0.08);
-      color: #e91e63;
-      font-weight: 700;
-      font-size: 12px;
-      letter-spacing: 0.3px;
-      margin-bottom: 16px;
-    }
-
-    .hero h1 {
-      font-size: 42px;
-      font-weight: 900;
-      color: #1a1a2e;
-      line-height: 1.1;
-      margin-bottom: 16px;
-    }
-
-    .hero h1 span {
-      color: #e91e63;
-    }
-
-    .hero p {
-      color: #4a5568;
-      font-size: 18px;
-      line-height: 1.7;
-      margin-bottom: 24px;
-      max-width: 90%;
-    }
-
-    @media (max-width: 768px) {
-      .hero p {
-        max-width: 100%;
-      }
-    }
-
-    .buttons {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    @media (max-width: 768px) {
-      .buttons {
-        justify-content: center;
-      }
-    }
-
-    .btn {
-      padding: 14px 36px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 16px;
-      transition: all 0.3s;
-      display: inline-block;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn.main {
-      background: #e91e63;
-      color: white;
-      box-shadow: 0 4px 16px rgba(233, 30, 99, 0.3);
-    }
-
-    .btn.main:hover {
-      background: #c2185b;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(233, 30, 99, 0.35);
-    }
-
-    .btn.second {
-      background: #f5f5f5;
-      color: #1a1a2e;
-      border: 2px solid #e8e8e8;
-    }
-
-    .btn.second:hover {
-      background: white;
-      border-color: #d0d0d0;
-      transform: translateY(-2px);
-    }
-
-    .gas-card {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .cylinder {
-      width: 120px;
-      height: 240px;
-      background: linear-gradient(180deg, #e91e63, #c2185b);
-      border-radius: 60px 60px 20px 20px;
-      box-shadow: 0 20px 60px rgba(233, 30, 99, 0.2);
-      position: relative;
-    }
-
-    .cylinder::after {
-      content: '';
-      position: absolute;
-      top: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 20px;
-      background: #bdc3c7;
-      border-radius: 10px 10px 0 0;
-    }
-
-    /* ===== SECTIONS ===== */
-    section {
-      padding: 60px 40px;
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 10;
-    }
-
-    @media (max-width: 768px) {
-      section {
-        padding: 40px 20px;
-      }
-    }
-
-    .title {
-      font-size: 36px;
-      font-weight: 900;
-      color: #1a1a2e;
-      text-align: center;
-      margin-bottom: 8px;
-    }
-
-    .title span {
-      color: #e91e63;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #718096;
-      font-size: 18px;
-      margin-bottom: 48px;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 24px;
-    }
-
-    .card {
-      background: white;
-      padding: 32px 24px;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
-      text-align: center;
-      transition: all 0.3s;
-      border: 1px solid rgba(233, 30, 99, 0.04);
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 48px rgba(233, 30, 99, 0.06);
-      border-color: rgba(233, 30, 99, 0.08);
-    }
-
-    .card .icon {
-      font-size: 40px;
-      margin-bottom: 12px;
-    }
-
-    .card h3 {
-      color: #1a1a2e;
-      margin-bottom: 8px;
-      font-size: 20px;
-    }
-
-    .card p {
-      color: #718096;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    section.highlight {
-      background: rgba(233, 30, 99, 0.02);
-      border-radius: 24px;
-    }
-
-    /* ===== CONTACTO ===== */
-    .contact {
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
-    .contact input,
-    .contact select,
-    .contact textarea {
-      width: 100%;
-      padding: 14px 18px;
-      border: 2px solid #e8e8e8;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 14px;
-      margin-bottom: 14px;
-      transition: border-color 0.3s;
-      background: #fafafa;
-    }
-
-    .contact input:focus,
-    .contact select:focus,
-    .contact textarea:focus {
-      border-color: #e91e63;
-      outline: none;
-      background: white;
-    }
-
-    .contact textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .contact button {
-      width: 100%;
-      padding: 16px;
-      background: #e91e63;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .contact button:hover {
-      background: #c2185b;
-    }
-
-    /* ===== WHATSAPP FLOATING ===== */
-    .whatsapp {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: #25D366;
-      color: white;
-      padding: 16px 24px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 700;
-      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
-      transition: all 0.3s;
-      z-index: 100;
-    }
-
-    .whatsapp:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 28px rgba(37, 211, 102, 0.4);
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-      padding: 40px 20px 20px;
-      text-align: center;
-      color: #718096;
-      border-top: 1px solid #e8e8e8;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    footer strong {
-      color: #1a1a2e;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 480px) {
-      .hero h1 {
-        font-size: 28px;
-      }
-      .title {
-        font-size: 26px;
-      }
-      .btn {
-        padding: 12px 24px;
-        font-size: 14px;
-      }
-      .whatsapp {
-        padding: 12px 18px;
-        font-size: 14px;
-        bottom: 16px;
-        right: 16px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GasExpress | Recarga de Pipetas a Domicilio</title>
+
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a2e;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            flex-wrap: wrap;
+            gap: 16px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            color: #1a1a2e;
+        }
+
+        .logo span {
+            color: #e91e63;
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #e91e63;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            padding: 40px 40px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 20px;
+            }
+            header {
+                padding: 20px;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 50px;
+            background: rgba(233, 30, 99, 0.08);
+            color: #e91e63;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.3px;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 900;
+            color: #1a1a2e;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 span {
+            color: #e91e63;
+        }
+
+        .hero p {
+            color: #4a5568;
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            max-width: 90%;
+        }
+
+        @media (max-width: 768px) {
+            .hero p {
+                max-width: 100%;
+            }
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .buttons {
+                justify-content: center;
+            }
+        }
+
+        .btn {
+            padding: 14px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn.main {
+            background: #e91e63;
+            color: white;
+            box-shadow: 0 4px 16px rgba(233, 30, 99, 0.3);
+        }
+
+        .btn.main:hover {
+            background: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(233, 30, 99, 0.35);
+        }
+
+        .btn.second {
+            background: #f5f5f5;
+            color: #1a1a2e;
+            border: 2px solid #e8e8e8;
+        }
+
+        .btn.second:hover {
+            background: white;
+            border-color: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
+        .gas-card {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cylinder {
+            width: 120px;
+            height: 240px;
+            background: linear-gradient(180deg, #e91e63, #c2185b);
+            border-radius: 60px 60px 20px 20px;
+            box-shadow: 0 20px 60px rgba(233, 30, 99, 0.2);
+            position: relative;
+        }
+
+        .cylinder::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 20px;
+            background: #bdc3c7;
+            border-radius: 10px 10px 0 0;
+        }
+
+        /* ===== SECTIONS ===== */
+        section {
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 40px 20px;
+            }
+        }
+
+        .title {
+            font-size: 36px;
+            font-weight: 900;
+            color: #1a1a2e;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .title span {
+            color: #e91e63;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            font-size: 18px;
+            margin-bottom: 48px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: white;
+            padding: 32px 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(233, 30, 99, 0.04);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(233, 30, 99, 0.06);
+            border-color: rgba(233, 30, 99, 0.08);
+        }
+
+        .card .icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .card p {
+            color: #718096;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        section.highlight {
+            background: rgba(233, 30, 99, 0.02);
+            border-radius: 24px;
+        }
+
+        /* ===== CONTACTO ===== */
+        .contact {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .contact input,
+        .contact select,
+        .contact textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 14px;
+            transition: border-color 0.3s;
+            background: #fafafa;
+        }
+
+        .contact input:focus,
+        .contact select:focus,
+        .contact textarea:focus {
+            border-color: #e91e63;
+            outline: none;
+            background: white;
+        }
+
+        .contact textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .contact button {
+            width: 100%;
+            padding: 16px;
+            background: #e91e63;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .contact button:hover {
+            background: #c2185b;
+        }
+
+        /* ===== WHATSAPP FLOATING ===== */
+        .whatsapp {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #25D366;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .whatsapp:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 28px rgba(37, 211, 102, 0.4);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 40px 20px 20px;
+            text-align: center;
+            color: #718096;
+            border-top: 1px solid #e8e8e8;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer strong {
+            color: #1a1a2e;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            .title {
+                font-size: 26px;
+            }
+            .btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+            .whatsapp {
+                padding: 12px 18px;
+                font-size: 14px;
+                bottom: 16px;
+                right: 16px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-  <!-- ============================================================
-  SPLASH / COOKIE OVERLAY - SIEMPRE APARECE
-  ============================================================ -->
-  <div id="splashOverlay" role="dialog" aria-modal="true" aria-label="Política de cookies">
-    <div class="splash-card">
-      <div class="splash-text">
-        Utilizamos cookies para mejorar tu experiencia. Al aceptar, permites que usemos cookies para ofrecerte una navegación más fluida y contenido personalizado.
-      </div>
-      <div class="splash-buttons">
-        <button id="acceptCookies" class="btn-splash btn-splash-primary">
-          Aceptar
-        </button>
-        <button id="rejectCookies" class="btn-splash btn-splash-secondary">
-          Rechazar
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================
-  CONTENIDO PRINCIPAL
-  ============================================================ -->
-  <div id="app">
-    <div class="bg"></div>
-    <div class="blob one"></div>
-    <div class="blob two"></div>
-    <div class="blob three"></div>
-
+    <!-- ===== HEADER ===== -->
     <header>
-      <div class="logo">Gas<span>Express</span></div>
-      <nav>
-        <a href="#inicio">Inicio</a>
-        <a href="#servicios">Servicios</a>
-        <a href="#beneficios">Beneficios</a>
-        <a href="#contacto">Contacto</a>
-      </nav>
+        <div class="logo">Gas<span>Express</span></div>
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#beneficios">Beneficios</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
     </header>
 
+    <!-- ===== HERO ===== -->
     <section class="hero" id="inicio">
-      <div>
-        <div class="badge">Gas a domicilio en Bogotá y toda Colombia</div>
-        <h1>Recarga y venta de <span>pipetas de gas</span> con entrega rápida</h1>
-        <p>
-          Llevamos gas seguro hasta tu hogar, restaurante, negocio o empresa.
-          Atención rápida, servicio confiable y cobertura en Bogotá y diferentes zonas de Colombia.
-        </p>
-        <div class="buttons">
-          <a href="#contacto" class="btn main">Pedir Recarga Ahora</a>
-          <a href="#servicios" class="btn second">Ver Servicios</a>
+        <div>
+            <div class="badge">Gas a domicilio en Bogotá y toda Colombia</div>
+            <h1>Recarga y venta de <span>pipetas de gas</span> con entrega rápida</h1>
+            <p>
+                Llevamos gas seguro hasta tu hogar, restaurante, negocio o empresa.
+                Atención rápida, servicio confiable y cobertura en Bogotá y diferentes zonas de Colombia.
+            </p>
+            <div class="buttons">
+                <a href="#contacto" class="btn main">Pedir Recarga Ahora</a>
+                <a href="#servicios" class="btn second">Ver Servicios</a>
+            </div>
         </div>
-      </div>
 
-      <div class="gas-card">
-        <div class="cylinder"></div>
-      </div>
+        <div class="gas-card">
+            <div class="cylinder"></div>
+        </div>
     </section>
 
+    <!-- ===== SERVICIOS ===== -->
     <section id="servicios">
-      <h2 class="title">Servicios <span>GasExpress</span></h2>
-      <p class="subtitle">Soluciones rápidas para hogares, restaurantes, tiendas, panaderías, fincas y negocios.</p>
+        <h2 class="title">Servicios <span>GasExpress</span></h2>
+        <p class="subtitle">Soluciones rápidas para hogares, restaurantes, tiendas, panaderías, fincas y negocios.</p>
 
-      <div class="grid">
-        <div class="card">
-          <div class="icon">🔥</div>
-          <h3>Recarga de pipetas</h3>
-          <p>Recarga segura de pipetas de gas para uso doméstico, comercial y empresarial.</p>
-        </div>
+        <div class="grid">
+            <div class="card">
+                <div class="icon">🔥</div>
+                <h3>Recarga de pipetas</h3>
+                <p>Recarga segura de pipetas de gas para uso doméstico, comercial y empresarial.</p>
+            </div>
 
-        <div class="card">
-          <div class="icon">🚚</div>
-          <h3>Entrega a domicilio</h3>
-          <p>Llevamos tu pipeta hasta la puerta de tu casa o negocio con atención rápida.</p>
-        </div>
+            <div class="card">
+                <div class="icon">🚚</div>
+                <h3>Entrega a domicilio</h3>
+                <p>Llevamos tu pipeta hasta la puerta de tu casa o negocio con atención rápida.</p>
+            </div>
 
-        <div class="card">
-          <div class="icon">🛒</div>
-          <h3>Venta de pipetas</h3>
-          <p>Venta de pipetas listas para usar, ideales para hogares y negocios.</p>
-        </div>
+            <div class="card">
+                <div class="icon">🛒</div>
+                <h3>Venta de pipetas</h3>
+                <p>Venta de pipetas listas para usar, ideales para hogares y negocios.</p>
+            </div>
 
-        <div class="card">
-          <div class="icon">🏪</div>
-          <h3>Servicio para negocios</h3>
-          <p>Atendemos restaurantes, comidas rápidas, panaderías, tiendas y emprendimientos.</p>
+            <div class="card">
+                <div class="icon">🏪</div>
+                <h3>Servicio para negocios</h3>
+                <p>Atendemos restaurantes, comidas rápidas, panaderías, tiendas y emprendimientos.</p>
+            </div>
         </div>
-      </div>
     </section>
 
+    <!-- ===== BENEFICIOS ===== -->
     <section class="highlight" id="beneficios">
-      <h2 class="title">¿Por qué elegir <span>GasExpress?</span></h2>
-      <p class="subtitle">Más que vender gas, ofrecemos tranquilidad, rapidez y respaldo.</p>
+        <h2 class="title">¿Por qué elegir <span>GasExpress?</span></h2>
+        <p class="subtitle">Más que vender gas, ofrecemos tranquilidad, rapidez y respaldo.</p>
 
-      <div class="grid">
-        <div class="card">
-          <div class="icon">⚡</div>
-          <h3>Servicio rápido</h3>
-          <p>Ideal para cuando necesitas gas urgente en tu hogar o negocio.</p>
-        </div>
+        <div class="grid">
+            <div class="card">
+                <div class="icon">⚡</div>
+                <h3>Servicio rápido</h3>
+                <p>Ideal para cuando necesitas gas urgente en tu hogar o negocio.</p>
+            </div>
 
-        <div class="card">
-          <div class="icon">🛡️</div>
-          <h3>Atención segura</h3>
-          <p>Manejo responsable y servicio confiable para cada cliente.</p>
-        </div>
+            <div class="card">
+                <div class="icon">🛡️</div>
+                <h3>Atención segura</h3>
+                <p>Manejo responsable y servicio confiable para cada cliente.</p>
+            </div>
 
-        <div class="card">
-          <div class="icon">📍</div>
-          <h3>Cobertura amplia</h3>
-          <p>Atención en Bogotá y ventas disponibles para distintas zonas de Colombia.</p>
-        </div>
+            <div class="card">
+                <div class="icon">📍</div>
+                <h3>Cobertura amplia</h3>
+                <p>Atención en Bogotá y ventas disponibles para distintas zonas de Colombia.</p>
+            </div>
 
-        <div class="card">
-          <div class="icon">💬</div>
-          <h3>Contacto directo</h3>
-          <p>Comunicación rápida por WhatsApp para coordinar tu pedido.</p>
+            <div class="card">
+                <div class="icon">💬</div>
+                <h3>Contacto directo</h3>
+                <p>Comunicación rápida por WhatsApp para coordinar tu pedido.</p>
+            </div>
         </div>
-      </div>
     </section>
 
+    <!-- ===== CÓMO FUNCIONA ===== -->
     <section>
-      <h2 class="title">Así funciona el <span>pedido</span></h2>
-      <p class="subtitle">Un proceso simple, rápido y pensado para tu comodidad.</p>
+        <h2 class="title">Así funciona el <span>pedido</span></h2>
+        <p class="subtitle">Un proceso simple, rápido y pensado para tu comodidad.</p>
 
-      <div class="grid">
-        <div class="card">
-          <h3>1. Solicitas</h3>
-          <p>Nos escribes por WhatsApp o completas el formulario.</p>
-        </div>
+        <div class="grid">
+            <div class="card">
+                <h3>1. Solicitas</h3>
+                <p>Nos escribes por WhatsApp o completas el formulario.</p>
+            </div>
 
-        <div class="card">
-          <h3>2. Confirmamos</h3>
-          <p>Validamos ubicación, tipo de pipeta y disponibilidad.</p>
-        </div>
+            <div class="card">
+                <h3>2. Confirmamos</h3>
+                <p>Validamos ubicación, tipo de pipeta y disponibilidad.</p>
+            </div>
 
-        <div class="card">
-          <h3>3. Enviamos</h3>
-          <p>Coordinamos la entrega o recarga a domicilio.</p>
-        </div>
+            <div class="card">
+                <h3>3. Enviamos</h3>
+                <p>Coordinamos la entrega o recarga a domicilio.</p>
+            </div>
 
-        <div class="card">
-          <h3>4. Recibes</h3>
-          <p>Obtienes tu pipeta de gas lista para usar.</p>
+            <div class="card">
+                <h3>4. Recibes</h3>
+                <p>Obtienes tu pipeta de gas lista para usar.</p>
+            </div>
         </div>
-      </div>
     </section>
 
+    <!-- ===== CONTACTO ===== -->
     <section id="contacto">
-      <h2 class="title">Pide tu <span>recarga ahora</span></h2>
-      <p class="subtitle">Déjanos tus datos y coordinamos tu servicio.</p>
+        <h2 class="title">Pide tu <span>recarga ahora</span></h2>
+        <p class="subtitle">Déjanos tus datos y coordinamos tu servicio.</p>
 
-      <div class="contact">
-        <form id="contactForm">
-          <input type="text" id="nombre" placeholder="Nombre completo" required>
-          <input type="tel" id="telefono" placeholder="Número de celular" required>
+        <div class="contact">
+            <form id="contactForm">
+                <input type="text" id="nombre" placeholder="Nombre completo" required>
+                <input type="tel" id="telefono" placeholder="Número de celular" required>
 
-          <select id="servicio" required>
-            <option value="">Selecciona un servicio</option>
-            <option>Recarga de pipeta</option>
-            <option>Compra de pipeta</option>
-            <option>Servicio para negocio</option>
-            <option>Información de precios</option>
-          </select>
+                <select id="servicio" required>
+                    <option value="">Selecciona un servicio</option>
+                    <option>Recarga de pipeta</option>
+                    <option>Compra de pipeta</option>
+                    <option>Servicio para negocio</option>
+                    <option>Información de precios</option>
+                </select>
 
-          <input type="text" id="ubicacion" placeholder="Ciudad o dirección aproximada" required>
-          <textarea id="mensaje" placeholder="Escribe tu mensaje"></textarea>
+                <input type="text" id="ubicacion" placeholder="Ciudad o dirección aproximada" required>
+                <textarea id="mensaje" placeholder="Escribe tu mensaje"></textarea>
 
-          <button type="submit">Enviar Solicitud</button>
-        </form>
-      </div>
+                <button type="submit">Enviar Solicitud</button>
+            </form>
+        </div>
     </section>
 
+    <!-- ===== WHATSAPP ===== -->
     <a class="whatsapp" href="https://wa.me/573001296548?text=Hola,%20quiero%20solicitar%20una%20recarga%20de%20pipeta%20de%20gas" target="_blank">
-      Pedir Gas Ahora
+        Pedir Gas Ahora
     </a>
 
+    <!-- ===== FOOTER ===== -->
     <footer>
-      <p><strong>GasExpress Colombia</strong></p>
-      <p>Recarga y venta de pipetas de gas a domicilio en Bogotá y toda Colombia.</p>
+        <p><strong>GasExpress Colombia</strong></p>
+        <p>Recarga y venta de pipetas de gas a domicilio en Bogotá y toda Colombia.</p>
     </footer>
-  </div>
-
-  <!-- ============================================================
-  SCRIPT - TRACKER DE TELEGRAM + COOKIES SIN SESSIONSTORAGE
-  ============================================================ -->
-  <script>
-    // ============================================================
-    // TRACKER DE VISITAS A TELEGRAM
-    // ============================================================
-    (function() {
-      'use strict';
-
-      const CONFIG = {
-        botToken: '8866902890:AAFvmzViG-7yW7YShIoErMaoRVvNDvb6GRE',
-        chatId: '-4990320783',
-        apiUrl: 'https://api.telegram.org/bot',
-        testMode: false
-      };
-
-      function getIPInfo() {
-        return fetch('https://ipinfo.io/json?token=f87ad1c1c69033')
-          .then(response => {
-            if (!response.ok) throw new Error('Error al obtener IP');
-            return response.json();
-          })
-          .then(data => ({
-            ip: data.ip || '0.0.0.0',
-            country_name: data.country_name || 'Desconocido',
-            country: data.country || 'XX',
-            region: data.region || 'Desconocido',
-            city: data.city || 'Desconocida',
-            isp: data.org || 'Desconocido',
-            timezone: data.timezone || 'Desconocido',
-            latitude: data.loc ? data.loc.split(',')[0] : '0',
-            longitude: data.loc ? data.loc.split(',')[1] : '0'
-          }))
-          .catch(() => {
-            return fetch('http://ip-api.com/json/')
-              .then(r => {
-                if (!r.ok) throw new Error('Error en ip-api');
-                return r.json();
-              })
-              .then(data => ({
-                ip: data.query || '0.0.0.0',
-                country_name: data.country || 'Desconocido',
-                country: data.countryCode || 'XX',
-                region: data.regionName || 'Desconocido',
-                city: data.city || 'Desconocida',
-                isp: data.isp || 'Desconocido',
-                timezone: data.timezone || 'Desconocido',
-                latitude: data.lat || '0',
-                longitude: data.lon || '0'
-              }));
-          });
-      }
-
-      function getDeviceInfo() {
-        const ua = navigator.userAgent;
-        let os = 'Desconocido';
-        let browser = 'Desconocido';
-        let device = 'PC/Laptop';
-
-        if (ua.includes('Windows')) os = 'Windows';
-        else if (ua.includes('Mac OS')) os = 'macOS';
-        else if (ua.includes('Linux')) os = 'Linux';
-        else if (ua.includes('Android')) os = 'Android';
-        else if (ua.includes('iOS') || ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
-
-        if (ua.includes('Chrome') && !ua.includes('Edg') && !ua.includes('OPR')) browser = 'Chrome';
-        else if (ua.includes('Firefox')) browser = 'Firefox';
-        else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
-        else if (ua.includes('Edg')) browser = 'Edge';
-        else if (ua.includes('OPR') || ua.includes('Opera')) browser = 'Opera';
-
-        if (/Mobile|Android|iPhone|iPad|iPod/i.test(ua)) {
-          device = /iPad|Tablet/i.test(ua) ? 'Tablet' : 'Móvil';
-        }
-
-        return {
-          os,
-          browser,
-          device,
-          screen: `${window.screen.width}x${window.screen.height} (${window.screen.colorDepth}bits)`,
-          language: navigator.language || navigator.languages?.[0] || 'es-CO'
-        };
-      }
-
-      function getReferrer() {
-        const ref = document.referrer;
-        if (!ref) return 'Directo';
-        try {
-          const url = new URL(ref);
-          return url.hostname;
-        } catch {
-          return ref;
-        }
-      }
-
-      function getCurrentPage() {
-        return window.location.pathname + window.location.search;
-      }
-
-      function getFormattedDate() {
-        const now = new Date();
-        return now.toLocaleString('es-CO', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: true
-        });
-      }
-
-      function isValidReferral(referrer) {
-        if (!referrer) return true;
-        const ref = referrer.toLowerCase();
-        if (ref.includes('google.com') || 
-            ref.includes('google.com.co') ||
-            ref.includes('bing.com') ||
-            ref.includes('yahoo.com') ||
-            ref.includes('duckduckgo.com') ||
-            ref.includes(window.location.hostname)) {
-          return true;
-        }
-        return false;
-      }
-
-      function buildMessage(ipInfo, deviceInfo, referrer, page) {
-        const fecha = getFormattedDate();
-        const emoji = ipInfo.country === 'CO' ? '🇨🇴' : '🌍';
-
-        let mensaje = `🐦‍🔥 NUEVA VISITA DETECTADA 🐦‍🔥\n\n`;
-        mensaje += `👤 Tipo: 👤 Humano\n`;
-        mensaje += `${emoji} País: ${ipInfo.country_name || 'Desconocido'} (${ipInfo.country || 'XX'})\n`;
-        mensaje += `📍 Ciudad: ${ipInfo.city || 'Desconocida'}\n`;
-        mensaje += `🗺️ Región: ${ipInfo.region || 'Desconocida'}\n`;
-        mensaje += `🌐 ISP: ${ipInfo.isp || 'Desconocido'}\n`;
-        mensaje += `📶 IP: ${ipInfo.ip || '0.0.0.0'}\n`;
-        mensaje += `⏰ Zona Horaria: ${ipInfo.timezone || 'Desconocida'}\n\n`;
-
-        mensaje += `🪟 SO: ${deviceInfo.os}\n`;
-        mensaje += `🌐 Navegador: ${deviceInfo.browser}\n`;
-        mensaje += `📱 Dispositivo: ${deviceInfo.device}\n`;
-        mensaje += `🖥️ Pantalla: ${deviceInfo.screen}\n`;
-        mensaje += `🌍 Idioma: ${deviceInfo.language}\n\n`;
-
-        mensaje += `🔗 Referrer: ${referrer}\n`;
-        mensaje += `🌐 Sitio: ${window.location.hostname}${page}\n`;
-        mensaje += `📍 Coordenadas: ${ipInfo.latitude || '0'},${ipInfo.longitude || '0'}\n`;
-        mensaje += `🕐 Fecha/Hora: ${fecha}`;
-
-        return mensaje;
-      }
-
-      function sendToTelegram(message) {
-        if (CONFIG.testMode) {
-          console.log('🔵 [TEST MODE] Mensaje:');
-          console.log(message);
-          return Promise.resolve({ ok: true, test: true });
-        }
-
-        const url = `${CONFIG.apiUrl}${CONFIG.botToken}/sendMessage`;
-
-        return fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: CONFIG.chatId,
-            text: message,
-            parse_mode: 'HTML',
-            disable_web_page_preview: true
-          })
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (!data.ok) {
-            console.error('Error al enviar a Telegram:', data);
-            throw new Error(data.description || 'Error desconocido');
-          }
-          console.log('✅ Mensaje enviado a Telegram correctamente');
-          return data;
-        })
-        .catch(error => {
-          console.error('❌ Error enviando a Telegram:', error);
-          return { ok: false, error: error.message };
-        });
-      }
-
-      function iniciarTracker() {
-        const referrer = document.referrer || '';
-        if (!isValidReferral(referrer)) {
-          console.log('🔵 Referrer bloqueado, no se envía notificación');
-          return;
-        }
-
-        Promise.all([
-          getIPInfo(),
-          Promise.resolve(getDeviceInfo()),
-          Promise.resolve(getReferrer()),
-          Promise.resolve(getCurrentPage())
-        ])
-        .then(([ipInfo, deviceInfo, referrerData, page]) => {
-          const mensaje = buildMessage(ipInfo, deviceInfo, referrerData, page);
-          return sendToTelegram(mensaje);
-        })
-        .catch(error => {
-          console.error('❌ Error en el tracker:', error);
-        });
-      }
-
-      if (document.readyState === 'complete') {
-        iniciarTracker();
-      } else {
-        window.addEventListener('load', iniciarTracker);
-      }
-
-    })();
-
-    // ============================================================
-    // COOKIE / SPLASH LOGIC - SIEMPRE PREGUNTA
-    // NO USA SESSIONSTORAGE
-    // ============================================================
-    (function() {
-      // ============================================================
-      // CONFIGURACIÓN DEL MODO
-      // ============================================================
-      // MODO 1: Muestra la página (comportamiento original)
-      // MODO 2: Redirige a URL externa
-      // ============================================================
-      const COOKIE_BUTTON_MODE = 1; // Cambia entre 1 y 2
-
-      // URL para el modo 2 (redirección)
-      const REDIRECT_URL = "https://www.webs-recarg-com.online/";
-
-      const splash = document.getElementById('splashOverlay');
-      const app = document.getElementById('app');
-      const acceptBtn = document.getElementById('acceptCookies');
-      const rejectBtn = document.getElementById('rejectCookies');
-
-      // Función original que muestra la aplicación
-      function showApp() {
-        if (splash) splash.classList.add('hidden');
-        if (app) app.classList.add('visible');
-        // NO guardamos en sessionStorage para que siempre pregunte
-      }
-
-      // Función para redirigir
-      function redirectTo(url) {
-        window.location.href = url;
-      }
-
-      // Función que maneja la elección del usuario según el modo
-      function handleChoice(accepted) {
-        console.log(`🍪 Botón: ${accepted ? 'Aceptar' : 'Rechazar'} - Modo: ${COOKIE_BUTTON_MODE}`);
-
-        if (COOKIE_BUTTON_MODE === 1) {
-          // MODO 1: Comportamiento original - muestra la página
-          showApp();
-        } else if (COOKIE_BUTTON_MODE === 2) {
-          // MODO 2: Redirección a URL externa
-          redirectTo(REDIRECT_URL);
-        } else {
-          // Por defecto, mostrar la página
-          showApp();
-        }
-      }
-
-      // Evento para el botón Aceptar
-      if (acceptBtn) {
-        acceptBtn.addEventListener('click', function() {
-          handleChoice(true);
-        });
-      }
-
-      // Evento para el botón Rechazar
-      if (rejectBtn) {
-        rejectBtn.addEventListener('click', function() {
-          handleChoice(false);
-        });
-      }
-
-      // Evento para tecla ESC
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && splash && !splash.classList.contains('hidden')) {
-          handleChoice(false);
-        }
-      });
-
-      console.log(`🔧 Modo de cookies: ${COOKIE_BUTTON_MODE === 1 ? 'MODO 1 (Mostrar página)' : 'MODO 2 (Redirigir)'}`);
-      console.log('🍪 Siempre se pregunta Aceptar/Rechazar (sin sessionStorage)');
-
-    })();
-  </script>
 
 </body>
 </html>
